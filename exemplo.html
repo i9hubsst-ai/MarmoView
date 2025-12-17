@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo Prático - MarmoView</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --branco-marmore: #F5F5F2;
+            --cinza-claro: #DADADA;
+            --cinza-medio: #9E9E9E;
+            --grafite: #2E2E2E;
+            --jade: #6E8B7F;
+            --jade-claro: #9BB8AE;
+            --areia: #E6E1D8;
+            --ambar: #C9A66B;
+            --terracota: #A45A52;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            min-height: 100vh;
+            padding: 0 20px 20px 20px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 10px 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--cinza-medio);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .topbar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .topbar a { color: var(--branco-marmore); text-decoration: none; font-weight: 600; }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        header {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h1 { color: var(--grafite); margin-bottom: 10px; }
+
+        .breadcrumb {
+            color: var(--grafite);
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+
+        .breadcrumb a { color: var(--jade); text-decoration: none; font-weight: 600; }
+        .breadcrumb a:hover { color: var(--jade-claro); text-decoration: underline; }
+
+        .content {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h2 {
+            color: var(--grafite);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+
+        h3 { color: var(--grafite); margin-top: 16px; margin-bottom: 8px; }
+
+        p { line-height: 1.7; color: var(--grafite); margin-bottom: 12px; }
+
+        ul { margin: 12px 0 12px 24px; color: var(--grafite); line-height: 1.7; }
+        li { margin: 8px 0; }
+
+        .step {
+            background: var(--areia);
+            border-left: 4px solid var(--jade);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 3px;
+        }
+
+        .step h3 { margin-top: 0; }
+
+        .step-number {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            width: 30px;
+            height: 30px;
+            border-radius: 3px;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .drawing {
+            background: var(--branco-marmore);
+            border: 1px solid var(--cinza-medio);
+            padding: 12px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            padding: 10px 18px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--jade);
+        }
+
+        .btn:hover { background: var(--jade-claro); color: var(--grafite); }
+        .btn-back { margin-bottom: 20px; }
+
+        .highlight {
+            background: var(--areia);
+            border: 1px solid var(--ambar);
+            border-radius: 3px;
+            padding: 12px;
+            margin: 15px 0;
+            color: var(--grafite);
+        }
+
+        .table-simple { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .table-simple th {
+            background: var(--branco-marmore);
+            border-bottom: 2px solid var(--cinza-medio);
+            padding: 8px;
+            text-align: left;
+        }
+        .table-simple td { padding: 8px; border-bottom: 1px solid var(--cinza-medio); }
+
+        footer {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="brand">🪨 MarmoView</span>
+        <div class="actions">
+            <a href="index.html">Início</a>
+            <a href="docs.html">Documentação</a>
+            <a href="prompts.html">Prompts</a>
+            <a href="regras.html">Regras</a>
+            <a href="exemplo.html">Exemplo</a>
+            <a href="config.html">Config</a>
+            <a href="glossario.html">Glossário</a>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">
+                <a href="index.html">MarmoView</a> > Exemplo Prático
+            </div>
+            <h1>📚 Exemplo de Uso Completo</h1>
+            <p>Caso prático: Cozinha residencial com bancada em L</p>
+        </header>
+        
+        <div class="content">
+            <a href="index.html" class="btn btn-back">← Voltar ao Início</a>
+            
+            <h2>📸 Cenário: Cozinha Residencial</h2>
+            <p><strong>Descrição da imagem recebida:</strong></p>
+            <p><em>Foto de uma cozinha com bancada em formato L. Visível uma cuba embutida no segmento maior e um cooktop no segmento menor. Armários superiores e inferiores presentes. Parede revestida com azulejos brancos.</em></p>
+            
+            <h2>🔍 Etapa 1: Análise (Prompt 1)</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">1</span>Resultado da Análise</h3>
+                <p><strong>Tipo de Ambiente:</strong> Cozinha residencial</p>
+                <p><strong>Elementos em Pedra Identificados:</strong> Bancada em formato L</p>
+                <p><strong>Formato Geométrico:</strong> L com dois segmentos perpendiculares</p>
+                <ul>
+                    <li>Segmento maior: parede frontal</li>
+                    <li>Segmento menor: parede lateral direita</li>
+                </ul>
+                <p><strong>Recortes Identificados:</strong></p>
+                <ul>
+                    <li>Cuba embutida (retangular) no segmento maior</li>
+                    <li>Cooktop (retangular) no segmento menor</li>
+                </ul>
+                <p><strong>Limitações Visuais:</strong></p>
+                <ul>
+                    <li>Não é possível determinar medidas exatas</li>
+                    <li>Profundidade dos segmentos não visível com precisão</li>
+                    <li>Altura da bancada não determinável</li>
+                </ul>
+            </div>
+            
+            <h2>✏️ Etapa 2: Desenho Gerado (Prompt 2)</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">2</span>Desenho Técnico Inicial</h3>
+                <p><strong>Formato:</strong> Planta 2D Vista Superior</p>
+                <p><strong>Especificações:</strong></p>
+                <ul>
+                    <li>Sem cotas ou medidas</li>
+                    <li>Sem cores, texturas ou sombras</li>
+                    <li>Linhas simples e limpas</li>
+                    <li>Recortes representados</li>
+                </ul>
+                
+                <div class="drawing">
+┌────────────────────────────────────────────┐
+│                                            │
+│  VISTA SUPERIOR - BANCADA EM L             │
+│                                            │
+│                                            │
+│  ═══════════════════════════════          │
+│  ║                           ║          │
+│  ║                           ║          │
+│  ║       ┌────────┐          ║          │
+│  ║       │  CUBA  │          ║          │
+│  ║       └────────┘          ║          │
+│  ║                           ║          │
+│  ║                           ║          │
+│  ║                           ╚═══════   │
+│  ║                                 ║   │
+│  ║         ┌──────────┐            ║   │
+│  ║         │ COOKTOP  │            ║   │
+│  ║         └──────────┘            ║   │
+│  ║                                 ║   │
+│  ═══════════════════════════════════   │
+│                                            │
+└────────────────────────────────────────────┘
+                </div>
+            </div>
+            
+            <h2>🔄 Etapa 3: Feedback do Usuário</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">3</span>Revisão Solicitada</h3>
+                <p><strong>Usuário comenta:</strong></p>
+                <p><em>"O cooktop está mais próximo do canto do L, não centralizado como mostrado."</em></p>
+                
+                <p><strong>Sistema responde:</strong></p>
+                <p><em>"Entendido. Vou reposicionar o cooktop mais próximo ao canto interno do L.</em></p>
+                <p><em>Confirme: O cooktop deve ficar adjacente ao encontro dos dois segmentos?</em></p>
+                <p><em>A cuba permanece na posição atual?"</em></p>
+                
+                <p><strong>Usuário confirma:</strong></p>
+                <p><em>"Sim, correto!"</em></p>
+            </div>
+            
+            <h2>✏️ Etapa 4: Desenho Revisado (Prompt 3)</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">4</span>Desenho Corrigido</h3>
+                <p><strong>Alterações Realizadas:</strong></p>
+                <ul>
+                    <li>✓ Cooktop reposicionado para o canto interno do L</li>
+                    <li>✓ Cuba mantida na posição original</li>
+                    <li>✓ Estilo técnico preservado</li>
+                    <li>✓ Simplicidade mantida</li>
+                </ul>
+                
+                <div class="drawing">
+┌────────────────────────────────────────────┐
+│                                            │
+│  VISTA SUPERIOR - BANCADA EM L (REVISADA) │
+│                                            │
+│                                            │
+│  ═══════════════════════════════          │
+│  ║                           ║          │
+│  ║                           ║          │
+│  ║       ┌────────┐          ║          │
+│  ║       │  CUBA  │          ║          │
+│  ║       └────────┘          ║          │
+│  ║                           ║          │
+│  ║                           ║          │
+│  ║                           ╚═══════   │
+│  ║        ┌──────────┐            ║   │
+│  ║        │ COOKTOP  │            ║   │
+│  ║        └──────────┘            ║   │
+│  ║                                 ║   │
+│  ║                                 ║   │
+│  ═══════════════════════════════════   │
+│                                            │
+│                                            │
+└────────────────────────────────────────────┘
+                </div>
+            </div>
+            
+            <h2>✅ Etapa 5: Aprovação do Desenho</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">5</span>Desenho Aprovado</h3>
+                <p><strong>Usuário confirma:</strong> "Perfeito! Pode gerar o PDF"</p>
+                <p><strong>Sistema procede à exportação.</strong></p>
+            </div>
+            
+            <h2>📄 Etapa 6: Exportação Final (Prompt 4)</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">6</span>PDF Padronizado</h3>
+                <p><strong>Arquivo gerado:</strong> marmoview_MV-2025-0001.pdf</p>
+                
+                <div class="drawing" style="font-size: 0.85em; line-height: 1.4;">
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│  Sistema: MarmoView                                          │
+│  Projeto: MV-2025-0001                                       │
+│  Data: 13/12/2025                                            │
+│                                                              │
+│  ⚠️  OBSERVAÇÃO IMPORTANTE:                                  │
+│                                                              │
+│  Desenho conceitual para apoio à medição em campo.          │
+│  NÃO UTILIZAR PARA FABRICAÇÃO OU CORTE.                     │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│   VISTA SUPERIOR - BANCADA EM L                              │
+│                                                              │
+│   ═══════════════════════════════                           │
+│   ║                           ║                           │
+│   ║       ┌────────┐          ║                           │
+│   ║       │  CUBA  │          ║                           │
+│   ║       └────────┘          ║                           │
+│   ║                           ║                           │
+│   ║                           ╚═══════                    │
+│   ║        ┌──────────┐            ║                    │
+│   ║        │ COOKTOP  │            ║                    │
+│   ║        └──────────┘            ║                    │
+│   ║                                 ║                    │
+│   ═══════════════════════════════════                    │
+│                                                              │
+│                                                              │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  Observações de campo:                                       │
+│                                                              │
+│  ___________________________________________________________  │
+│                                                              │
+│  ___________________________________________________________  │
+│                                                              │
+│  ___________________________________________________________  │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+                </div>
+            </div>
+            
+            <h2>🎯 Etapa 7: Uso em Campo</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">7</span>Medição e Anotações</h3>
+                <p><strong>O que acontece agora:</strong></p>
+                <ul>
+                    <li>✓ Equipe leva o PDF impressão para o local</li>
+                    <li>✓ Realiza medições reais em campo com trena</li>
+                    <li>✓ Anota as dimensões exactas na área de observações</li>
+                    <li>✓ Utiliza o desenho como referência visual</li>
+                    <li>✓ Retorna com dados reais para execução</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>✅ Resultado:</strong> O desenho funcionou como apoio correto à medição, reduzindo erros e padronizando o processo.
+                </div>
+            </div>
+            
+            <h2>📊 Resumo do Processo</h2>
+            
+            <table class="table-simple">
+                <tr>
+                    <th>Etapa</th>
+                    <th>Ação</th>
+                    <th>Tempo Estimado</th>
+                </tr>
+                <tr>
+                    <td>1. Upload</td>
+                    <td>Enviar imagem</td>
+                    <td>30 segundos</td>
+                </tr>
+                <tr>
+                    <td>2. Análise</td>
+                    <td>Interpretar ambiente</td>
+                    <td>15 segundos</td>
+                </tr>
+                <tr>
+                    <td>3. Desenho</td>
+                    <td>Gerar conceitual</td>
+                    <td>30 segundos</td>
+                </tr>
+                <tr>
+                    <td>4. Revisão</td>
+                    <td>Ajustes se necessário</td>
+                    <td>1-2 minutos</td>
+                </tr>
+                <tr>
+                    <td>5. Exportação</td>
+                    <td>Gerar PDF</td>
+                    <td>10 segundos</td>
+                </tr>
+                <tr style="background: var(--branco-marmore); font-weight: bold;">
+                    <td colspan="2">TEMPO TOTAL</td>
+                    <td>~3 minutos</td>
+                </tr>
+            </table>
+            
+            <h2>🏆 Resultado Final</h2>
+            
+            <div style="background: var(--areia); border-left: 4px solid var(--jade); padding: 16px; border-radius: 3px; margin: 16px 0;">
+                <h3 style="color: var(--grafite); margin-top: 0;">✅ Objetivos Alcançados</h3>
+                <ul>
+                    <li>✓ Desenho técnico limpo e objetivo</li>
+                    <li>✓ Formato geométrico correto (L)</li>
+                    <li>✓ Recortes posicionados adequadamente</li>
+                    <li>✓ Sem dimensões ou cotas</li>
+                    <li>✓ PDF padronizado pronto para campo</li>
+                    <li>✓ Área para anotações manuais</li>
+                </ul>
+            </div>
+            
+            <h2>🔑 Aprendizados Principais</h2>
+            
+            <ul>
+                <li>MarmoView é um <strong>organizador visual</strong>, não um projeto executivo</li>
+                <li>O desenho serve para <strong>apoio à medição</strong>, não para fabricação</li>
+                <li>A <strong>medição em campo</strong> é obrigatória e insubstituível</li>
+                <li><strong>Quem mede, manda</strong> - princípio fundamental do sistema</li>
+            </ul>
+            
+            <h2>📚 Consulte Também</h2>
+            
+            <ul>
+                <li><a href="docs.html">Documentação Completa</a></li>
+                <li><a href="prompts.html">Prompts do Sistema</a></li>
+                <li><a href="regras.html">Regras e Restrições</a></li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p><strong>MarmoView v1.0.0</strong> - Dezembro 2025</p>
+            <p>© 2025 i9hubsst-ai. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompts - MarmoView</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --branco-marmore: #F5F5F2;
+            --cinza-claro: #DADADA;
+            --cinza-medio: #9E9E9E;
+            --grafite: #2E2E2E;
+            --jade: #6E8B7F;
+            --jade-claro: #9BB8AE;
+            --areia: #E6E1D8;
+            --ambar: #C9A66B;
+            --terracota: #A45A52;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            min-height: 100vh;
+            padding: 0 20px 20px 20px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 10px 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--cinza-medio);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .topbar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .topbar a { color: var(--branco-marmore); text-decoration: none; font-weight: 600; }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        header {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h1 { color: var(--grafite); margin-bottom: 10px; }
+
+        .breadcrumb {
+            color: var(--grafite);
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+
+        .breadcrumb a { color: var(--jade); text-decoration: none; font-weight: 600; }
+        .breadcrumb a:hover { color: var(--jade-claro); text-decoration: underline; }
+
+        .content {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h2 {
+            color: var(--grafite);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+
+        h3 { color: var(--grafite); margin-top: 16px; margin-bottom: 8px; }
+
+        p { line-height: 1.7; color: var(--grafite); margin-bottom: 12px; }
+
+        ul { margin: 12px 0 12px 24px; color: var(--grafite); line-height: 1.7; }
+        li { margin: 8px 0; }
+
+        .prompt-card {
+            background: var(--areia);
+            border-left: 4px solid var(--jade);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 3px;
+        }
+
+        .prompt-card h4 { color: var(--grafite); margin-bottom: 10px; }
+        .prompt-card .file { color: var(--grafite); font-size: 0.85em; margin-bottom: 10px; font-family: monospace; }
+
+        .btn {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            padding: 10px 18px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--jade);
+        }
+
+        .btn:hover { background: var(--jade-claro); color: var(--grafite); }
+        .btn-back { margin-bottom: 20px; }
+
+        code {
+            background: var(--branco-marmore);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+
+        footer {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="brand">🪨 MarmoView</span>
+        <div class="actions">
+            <a href="index.html">Início</a>
+            <a href="docs.html">Documentação</a>
+            <a href="prompts.html">Prompts</a>
+            <a href="regras.html">Regras</a>
+            <a href="exemplo.html">Exemplo</a>
+            <a href="config.html">Config</a>
+            <a href="glossario.html">Glossário</a>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">
+                <a href="index.html">MarmoView</a> > Prompts do Sistema
+            </div>
+            <h1>✏️ Prompts Estruturados</h1>
+            <p>Os 4 prompts que definem o comportamento da IA MarmoView</p>
+        </header>
+        
+        <div class="content">
+            <a href="index.html" class="btn btn-back">← Voltar ao Início</a>
+            
+            <h2>🔍 Visão Geral dos Prompts</h2>
+            <p>O sistema MarmoView utiliza 4 prompts estruturados que trabalham em sequência para fornecer uma análise completa e iterativa:</p>
+            
+            <h2>1️⃣ Prompt de Análise do Arquivo</h2>
+            
+            <div class="prompt-card">
+                <h4>📋 Analisa a imagem enviada</h4>
+                <p class="file">Arquivo: prompts/01_analise_arquivo.md</p>
+                <p><strong>Objetivo:</strong> Extrair informações técnicas da imagem fornecida.</p>
+                <p><strong>Identifica:</strong></p>
+                <ul>
+                    <li>Tipo de ambiente (cozinha, banheiro, área gourmet, etc.)</li>
+                    <li>Elementos em pedra natural (bancadas, tampos, ilhas, frontais, nichos)</li>
+                    <li>Formato geométrico predominante (reto, L, U, ilha central)</li>
+                    <li>Recortes aparentes (pia, cuba, cooktop, fogão)</li>
+                    <li>Limitações visuais (ângulos não visíveis, partes encobertas)</li>
+                </ul>
+                <p><strong>Saída:</strong> Descrição clara do ambiente como se orientasse um técnico de marmoraria.</p>
+            </div>
+            
+            <h2>2️⃣ Prompt de Geração do Desenho</h2>
+            
+            <div class="prompt-card">
+                <h4>✏️ Cria o desenho conceitual</h4>
+                <p class="file">Arquivo: prompts/02_geracao_desenho.md</p>
+                <p><strong>Objetivo:</strong> Gerar um desenho técnico minimalista baseado na análise.</p>
+                <p><strong>Requisitos do Desenho:</strong></p>
+                <ul>
+                    <li>Estilo técnico e minimalista</li>
+                    <li>Sem cores, texturas, sombras ou perspectiva realista</li>
+                    <li>Formato: Planta 2D superior OU Perspectiva isométrica simples</li>
+                    <li>Apenas: formato das bancadas, relação espacial, recortes visíveis</li>
+                </ul>
+                <p><strong>O que NÃO deve ter:</strong></p>
+                <ul>
+                    <li>❌ Cotas ou medidas</li>
+                    <li>❌ Espessuras específicas</li>
+                    <li>❌ Detalhes de acabamento</li>
+                    <li>❌ Elementos não relacionados</li>
+                </ul>
+                <p><strong>Saída:</strong> Desenho técnico limpo pronto para revisão.</p>
+            </div>
+            
+            <h2>3️⃣ Prompt de Revisão Iterativa</h2>
+            
+            <div class="prompt-card">
+                <h4>🔄 Permite ajustes e correções</h4>
+                <p class="file">Arquivo: prompts/03_revisao_iterativa.md</p>
+                <p><strong>Objetivo:</strong> Reanalise e ajuste o desenho conforme feedback.</p>
+                <p><strong>Ajustes Permitidos:</strong></p>
+                <ul>
+                    <li>Forma geométrica</li>
+                    <li>Orientação das peças</li>
+                    <li>Inclusão/remoção de elementos visíveis</li>
+                    <li>Reposicionamento de recortes</li>
+                </ul>
+                <p><strong>Deve Manter:</strong></p>
+                <ul>
+                    <li>✓ Mesmo nível de simplicidade</li>
+                    <li>✓ Mesmo estilo técnico</li>
+                    <li>✓ Mesma finalidade de apoio</li>
+                    <li>✓ Ausência de cotas</li>
+                </ul>
+                <p><strong>Saída:</strong> Desenho revisado com as alterações solicitadas.</p>
+            </div>
+            
+            <h2>4️⃣ Prompt de Saída Final (PDF)</h2>
+            
+            <div class="prompt-card">
+                <h4>📄 Prepara o PDF final</h4>
+                <p class="file">Arquivo: prompts/04_saida_final.md</p>
+                <p><strong>Objetivo:</strong> Exportar o desenho aprovado em formato PDF padronizado.</p>
+                <p><strong>Elementos Obrigatórios do PDF:</strong></p>
+                <ul>
+                    <li>Cabeçalho com identificação (Sistema, Projeto, Data)</li>
+                    <li>Aviso legal: "Desenho conceitual para apoio à medição em campo. NÃO UTILIZAR PARA FABRICAÇÃO OU CORTE."</li>
+                    <li>Área para anotações manuais</li>
+                </ul>
+                <p><strong>Especificações:</strong></p>
+                <ul>
+                    <li>Tamanho: A4 (210mm × 297mm)</li>
+                    <li>Orientação: Adequada ao desenho</li>
+                    <li>Margens: 20mm em todos os lados</li>
+                    <li>Número de Projeto: MV-AAAA-NNNN (ex: MV-2025-0001)</li>
+                </ul>
+                <p><strong>Saída:</strong> PDF pronto para impressão e uso em campo.</p>
+            </div>
+            
+            <h2>🔄 Fluxo de Execução dos Prompts</h2>
+            
+            <p style="background: var(--areia); padding: 12px; border-radius: 3px; margin: 16px 0; border: 1px solid var(--cinza-medio);">
+                <strong>Usuário envia imagem</strong> → 
+                <strong>Prompt 1 (Análise)</strong> → 
+                <strong>Prompt 2 (Geração)</strong> → 
+                <strong>Prompt 3 (Revisão - opcional)</strong> → 
+                <strong>Prompt 4 (PDF)</strong> → 
+                <strong>Documento pronto para campo</strong>
+            </p>
+            
+            <h2>📝 Exemplo de Saída do Prompt 1</h2>
+            
+            <pre style="background: var(--branco-marmore); padding: 12px; border-radius: 3px; overflow-x: auto; margin: 12px 0; border: 1px solid var(--cinza-medio);">
+Ambiente identificado: Cozinha residencial
+Elementos em pedra: Bancada em L
+Formato: L com segmento maior em parede frontal
+         e menor em lateral direita
+Recortes visíveis: Cuba embutida no segmento maior,
+                   cooktop no segmento menor
+Limitações: Não é possível visualizar profundidade
+            exata nem alturas
+            </pre>
+            
+            <h2>📝 Exemplo de Saída do Prompt 2</h2>
+            
+            <pre style="background: var(--branco-marmore); padding: 12px; border-radius: 3px; overflow-x: auto; margin: 12px 0; border: 1px solid var(--cinza-medio);">
+VISTA SUPERIOR - BANCADA EM L
+
+═════════════════════════════════
+║                         ║
+║       ┌────────┐        ║
+║       │  CUBA  │        ║
+║       └────────┘        ║
+║                         ║
+║                         ╚═════════
+║          ┌──────────┐        ║
+║          │ COOKTOP  │        ║
+║          └──────────┘        ║
+║                              ║
+═══════════════════════════════
+            </pre>
+            
+            <h2>✅ Checklist de Qualidade dos Prompts</h2>
+            
+            <ul>
+                <li>✓ Prompt 1 identifica corretamente o ambiente</li>
+                <li>✓ Prompt 2 gera desenho sem dimensões</li>
+                <li>✓ Prompt 3 permite iteração mantendo consistência</li>
+                <li>✓ Prompt 4 inclui todos os elementos obrigatórios</li>
+                <li>✓ Cada prompt respeita as regras do sistema</li>
+            </ul>
+            
+            <h2>📚 Consulte Também</h2>
+            
+            <ul>
+                <li><a href="regras.html">Regras e Restrições</a></li>
+                <li><a href="exemplo.html">Exemplo Completo</a></li>
+                <li><a href="glossario.html">Glossário Técnico</a></li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p><strong>MarmoView v1.0.0</strong> - Dezembro 2025</p>
+            <p>© 2025 i9hubsst-ai. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>

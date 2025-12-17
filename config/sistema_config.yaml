@@ -1,0 +1,165 @@
+# Configuração do Sistema MarmoView
+# Versão 1.0.0
+
+sistema:
+  nome: "MarmoView"
+  versao: "1.0.0"
+  descricao: "Sistema de IA para interpretação visual de ambientes em marmoraria"
+  data_lancamento: "2025-12-13"
+
+# Configurações de comportamento da IA
+comportamento:
+  estilo: "técnico"
+  tom: "objetivo"
+  nivel_conservadorismo: "alto"
+  permite_suposicoes: false
+  
+# Regras de segurança (não podem ser alteradas)
+restricoes:
+  criar_cotas: false
+  estimar_dimensoes: false
+  criar_desenho_fabricacao: false
+  criar_plano_corte: false
+  aplicar_escala: false
+  
+# Requisitos obrigatórios
+obrigatorios:
+  interpretar_visivel_apenas: true
+  manter_desenho_simples: true
+  usar_formas_geometricas_basicas: true
+  tratar_como_rascunho: true
+
+# Configurações de desenho
+desenho:
+  estilo:
+    tipo: "minimalista"
+    cores: false
+    texturas: false
+    sombras: false
+    perspectiva_realista: false
+  
+  formatos_permitidos:
+    - "planta_2d_superior"
+    - "isometrica_simples"
+  
+  elementos_representar:
+    - "formato_geral_bancadas"
+    - "relacao_espacial_pecas"
+    - "recortes_visiveis"
+  
+  elementos_proibidos:
+    - "cotas"
+    - "medidas"
+    - "espessuras_especificas"
+    - "detalhes_acabamento"
+
+# Configurações de análise de imagem
+analise:
+  tipos_ambiente:
+    - "cozinha"
+    - "banheiro"
+    - "area_gourmet"
+    - "balcao"
+    - "outro"
+  
+  elementos_pedra:
+    - "bancadas"
+    - "tampos"
+    - "ilhas"
+    - "frontais"
+    - "nichos"
+  
+  formatos_geometricos:
+    - "reto"
+    - "l"
+    - "u"
+    - "ilha_central"
+    - "multiplos_segmentos"
+  
+  recortes_identificaveis:
+    - "pia"
+    - "cuba"
+    - "cooktop"
+    - "fogao"
+    - "outros"
+
+# Configurações de PDF
+pdf:
+  formato: "A4"
+  orientacao: "auto"  # auto, retrato, paisagem
+  margens:
+    topo: 20
+    direita: 20
+    inferior: 20
+    esquerda: 20
+    unidade: "mm"
+  
+  fonte:
+    familia: "sans-serif"  # Arial, Helvetica
+    tamanho_cabecalho: 12
+    tamanho_observacoes: 9
+  
+  numeracao_projeto:
+    prefixo: "MV"
+    formato: "MV-AAAA-NNNN"
+    digitos_sequencial: 4
+  
+  conteudo_obrigatorio:
+    cabecalho: true
+    aviso_legal: true
+    area_anotacoes: true
+  
+  texto_aviso: |
+    ⚠️  OBSERVAÇÃO IMPORTANTE:
+    
+    Desenho conceitual para apoio à medição em campo.
+    
+    NÃO UTILIZAR PARA FABRICAÇÃO OU CORTE.
+
+# Configurações de revisão
+revisao:
+  ajustes_permitidos:
+    - "forma_geometrica"
+    - "orientacao_pecas"
+    - "inclusao_remocao_elementos"
+    - "posicionamento_recortes"
+  
+  manter_consistente:
+    - "simplicidade"
+    - "estilo_tecnico"
+    - "finalidade_apoio"
+    - "ausencia_cotas"
+
+# Mensagens padrão do sistema
+mensagens:
+  boas_vindas: "Sistema MarmoView inicializado. Pronto para análise de ambientes."
+  aguardando_imagem: "Aguardando upload de imagem para análise..."
+  analise_iniciada: "Analisando ambiente... Aguarde."
+  desenho_gerado: "Desenho conceitual gerado. Deseja revisar?"
+  exportacao_concluida: "PDF exportado com sucesso."
+  
+  avisos:
+    sem_cotas: "Lembre-se: Este desenho NÃO contém dimensões reais."
+    medição_campo: "A medição em campo é obrigatória para execução."
+    quem_mede_manda: "Princípio fundamental: 'Quem mede, manda.'"
+
+# Metadados
+metadados:
+  desenvolvedor: "i9hubsst-ai"
+  repositorio: "MarmoView"
+  licenca: "Proprietária"
+  status: "Produção"
+  
+# Logs e auditoria
+logs:
+  nivel: "info"  # debug, info, warning, error
+  registrar_analises: true
+  registrar_geracoes: true
+  registrar_exportacoes: true
+  
+# Performance
+performance:
+  max_tamanho_imagem_mb: 10
+  timeout_analise_segundos: 30
+  timeout_geracao_segundos: 45
+  cache_resultados: true

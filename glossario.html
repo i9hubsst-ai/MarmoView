@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glossário - MarmoView</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --branco-marmore: #F5F5F2;
+            --cinza-claro: #DADADA;
+            --cinza-medio: #9E9E9E;
+            --grafite: #2E2E2E;
+            --jade: #6E8B7F;
+            --jade-claro: #9BB8AE;
+            --areia: #E6E1D8;
+            --ambar: #C9A66B;
+            --terracota: #A45A52;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            min-height: 100vh;
+            padding: 0 20px 20px 20px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 10px 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--cinza-medio);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .topbar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .topbar a { color: var(--branco-marmore); text-decoration: none; font-weight: 600; }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        header {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h1 { color: var(--grafite); margin-bottom: 10px; }
+
+        .breadcrumb {
+            color: var(--grafite);
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+
+        .breadcrumb a { color: var(--jade); text-decoration: none; font-weight: 600; }
+        .breadcrumb a:hover { color: var(--jade-claro); text-decoration: underline; }
+
+        .content {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h2 {
+            color: var(--grafite);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+
+        h3 { color: var(--grafite); margin-top: 16px; margin-bottom: 8px; }
+
+        p { line-height: 1.7; color: var(--grafite); margin-bottom: 12px; }
+
+        .term {
+            background: var(--areia);
+            border-left: 4px solid var(--jade);
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 3px;
+        }
+
+        .term strong { color: var(--grafite); font-size: 1.1em; }
+        .term p { margin: 8px 0; }
+
+        .ascii-art {
+            background: var(--branco-marmore);
+            border: 1px solid var(--cinza-medio);
+            padding: 12px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            padding: 10px 18px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--jade);
+        }
+
+        .btn:hover { background: var(--jade-claro); color: var(--grafite); }
+        .btn-back { margin-bottom: 20px; }
+
+        code {
+            background: var(--branco-marmore);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            border: 1px solid var(--cinza-medio);
+            color: var(--grafite);
+        }
+
+        ul { margin: 12px 0 12px 24px; color: var(--grafite); line-height: 1.7; }
+        li { margin: 6px 0; }
+
+        footer {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="brand">🪨 MarmoView</span>
+        <div class="actions">
+            <a href="index.html">Início</a>
+            <a href="docs.html">Documentação</a>
+            <a href="prompts.html">Prompts</a>
+            <a href="regras.html">Regras</a>
+            <a href="exemplo.html">Exemplo</a>
+            <a href="config.html">Config</a>
+            <a href="glossario.html">Glossário</a>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">
+                <a href="index.html">MarmoView</a> > Glossário
+            </div>
+            <h1>📚 Glossário Técnico</h1>
+            <p>Terminologia de marmoraria e do sistema MarmoView</p>
+        </header>
+        
+        <div class="content">
+            <a href="index.html" class="btn btn-back">← Voltar ao Início</a>
+            
+            <h2>🏗️ Termos de Marmoraria</h2>
+            
+            <div class="term">
+                <strong>Bancada</strong>
+                <p>Superfície horizontal em pedra natural (mármore, granito) instalada sobre armários ou estruturas de suporte. Utilizada em cozinhas, banheiros e áreas gourmet.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Tampo</strong>
+                <p>Similar à bancada, mas geralmente referindo-se a peças independentes ou de menor porte.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Ilha</strong>
+                <p>Bancada ou tampo independente, não fixado em paredes, geralmente localizado no centro do ambiente.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Frontal</strong>
+                <p>Peça vertical em pedra instalada como revestimento ou proteção de parede, comum em áreas de fogão ou cooktop.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Nicho</strong>
+                <p>Espaço embutido na parede revestido com pedra natural.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Cuba</strong>
+                <p>Pia embutida na bancada. Pode ser sobreposta, semi-encaixe ou sub-mesa.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Recorte</strong>
+                <p>Abertura feita na pedra para instalação de cubas, cooktops, fogões ou outros elementos.</p>
+            </div>
+            
+            <h2>📐 Formatos Geométricos</h2>
+            
+            <div class="term">
+                <strong>Reto/Retilíneo</strong>
+                <p>Bancada em formato de linha reta, sem ângulos ou curvas.</p>
+                <div class="ascii-art">═════════════════
+║               ║
+═════════════════</div>
+            </div>
+            
+            <div class="term">
+                <strong>Formato L</strong>
+                <p>Bancada com dois segmentos perpendiculares formando um "L".</p>
+                <div class="ascii-art">═══════════════
+║             ║
+║             ╚═══════
+║                   ║
+═════════════════════</div>
+            </div>
+            
+            <div class="term">
+                <strong>Formato U</strong>
+                <p>Bancada com três segmentos formando um "U", envolvendo três paredes.</p>
+                <div class="ascii-art">═══════════════════
+║                 ║
+║                 ║
+╚═══════     ═══════╗
+      ║     ║      
+      ═══════</div>
+            </div>
+            
+            <div class="term">
+                <strong>Ilha Central</strong>
+                <p>Bancada independente no centro do ambiente, não conectada às paredes.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Múltiplos Segmentos</strong>
+                <p>Composição com mais de três segmentos ou formatos irregulares.</p>
+            </div>
+            
+            <h2>💬 Termos do Sistema MarmoView</h2>
+            
+            <div class="term">
+                <strong>Desenho Conceitual</strong>
+                <p>Representação gráfica simplificada do ambiente, sem dimensões ou detalhes de execução.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Apoio à Medição</strong>
+                <p>Finalidade principal dos desenhos do MarmoView: servir como referência visual durante a medição em campo.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Organizador Visual</strong>
+                <p>Função do sistema de padronizar a interpretação e comunicação sobre o ambiente.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Rascunho Técnico</strong>
+                <p>Desenho preliminar, técnico mas não executivo, usado para organização e planejamento.</p>
+            </div>
+            
+            <h2>🎨 Tipos de Visualização</h2>
+            
+            <div class="term">
+                <strong>Planta 2D Superior</strong>
+                <p>Visão de cima (vista superior) do ambiente, como se olhássemos do teto.</p>
+                <div class="ascii-art">    VISTA SUPERIOR
+    
+═════════════════
+║     [CUBA]    ║
+║               ║
+════════════════</div>
+            </div>
+            
+            <div class="term">
+                <strong>Perspectiva Isométrica</strong>
+                <p>Visão tridimensional simplificada, sem perspectiva realista, mantendo ângulos simples.</p>
+                <div class="ascii-art">      ╱─────────╲
+     ╱           ╲
+    ╱    [CUBA]   ╲
+   ╱_______________╲
+   │               │
+   │               │
+   └───────────────┘</div>
+            </div>
+            
+            <h2>🔍 Recortes Comuns</h2>
+            
+            <div class="term">
+                <strong>Pia/Cuba</strong>
+                <p>Abertura para instalação de pia ou cuba. Representado como retângulo com rótulo.</p>
+                <div class="ascii-art">┌────────┐
+│  CUBA  │
+└────────┘</div>
+            </div>
+            
+            <div class="term">
+                <strong>Cooktop</strong>
+                <p>Abertura para instalação de fogão embutido (placa de indução, gás, etc.).</p>
+                <div class="ascii-art">┌──────────┐
+│ COOKTOP  │
+└──────────┘</div>
+            </div>
+            
+            <div class="term">
+                <strong>Fogão</strong>
+                <p>Similar ao cooktop, pode ser maior e incluir forno integrado.</p>
+                <div class="ascii-art">┌────────────┐
+│   FOGÃO    │
+└────────────┘</div>
+            </div>
+            
+            <h2>⛔ Termos Proibidos no MarmoView</h2>
+            
+            <div class="term">
+                <strong>❌ Cota</strong>
+                <p>Indicação numérica de dimensão (ex: 2.40m, 60cm). <strong>Absolutamente proibido</strong> nos desenhos MarmoView.</p>
+            </div>
+            
+            <div class="term">
+                <strong>❌ Escala</strong>
+                <p>Relação proporcional entre desenho e realidade (ex: 1:50, 1:100). <strong>Não deve</strong> ser aplicada.</p>
+            </div>
+            
+            <div class="term">
+                <strong>❌ Nesting</strong>
+                <p>Plano de aproveitamento de chapa para corte otimizado. <strong>Não é gerado</strong> pelo sistema.</p>
+            </div>
+            
+            <div class="term">
+                <strong>❌ Detalhamento Construtivo</strong>
+                <p>Especificação técnica para fabricação (acabamentos, juntas, fixações). <strong>Fora do escopo</strong> do MarmoView.</p>
+            </div>
+            
+            <div class="term">
+                <strong>❌ Espessura</strong>
+                <p>Dimensão da profundidade da pedra (ex: 2cm, 3cm). <strong>Não deve ser indicada</strong>.</p>
+            </div>
+            
+            <h2>🎯 Termos de Qualidade do Desenho</h2>
+            
+            <div class="term">
+                <strong>Minimalista</strong>
+                <p>Estilo simples, sem elementos desnecessários. Apenas o essencial.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Técnico</strong>
+                <p>Objetivo, sem decoração, focado em informação clara e funcional.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Limpo</strong>
+                <p>Sem poluição visual, linhas claras e legíveis em contraste adequado.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Conservador</strong>
+                <p>Que não faz suposições ou estimativas, apenas interpreta o visível.</p>
+            </div>
+            
+            <h2>🏆 Princípios Fundamentais</h2>
+            
+            <div class="term">
+                <strong>"Quem mede, manda"</strong>
+                <p>Princípio fundamental: as dimensões reais obtidas em campo prevalecem sempre sobre qualquer desenho ou estimativa.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Redutor de Erro Humano</strong>
+                <p>Função do sistema de minimizar interpretações incorretas do ambiente através da padronização visual.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Não Substitui o Marmorista</strong>
+                <p>O sistema apoia mas nunca substitui a expertise e verificação do profissional de marmoraria.</p>
+            </div>
+            
+            <h2>📄 Formato de Arquivo</h2>
+            
+            <div class="term">
+                <strong>PDF A4</strong>
+                <p>Formato de documento padronizado para exportação dos desenhos (210mm × 297mm).</p>
+            </div>
+            
+            <div class="term">
+                <strong>Cabeçalho Obrigatório</strong>
+                <p>Seção superior do PDF contendo identificação do sistema, projeto e avisos legais.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Área de Anotações</strong>
+                <p>Espaço em branco no rodapé do PDF para anotações manuais durante medição em campo.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Número de Projeto</strong>
+                <p>Identificador único no formato <code>MV-AAAA-NNNN</code> (ex: MV-2025-0042).</p>
+            </div>
+            
+            <h2>🪨 Materiais (Referência)</h2>
+            
+            <div class="term">
+                <strong>Mármore</strong>
+                <p>Rocha metamórfica, geralmente com veios característicos. Mais delicada que granito.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Granito</strong>
+                <p>Rocha ígnea, mais resistente, com textura granular. Mais durável em ambientes de cozinha.</p>
+            </div>
+            
+            <div class="term">
+                <strong>Pedras Naturais</strong>
+                <p>Termo genérico para mármore, granito e similares (basalto, ardósia, etc.).</p>
+            </div>
+            
+            <div class="term">
+                <strong>Quartzo/Silestone</strong>
+                <p>Pedras artificiais (engenheiradas). Mencionado apenas quando visível na imagem.</p>
+            </div>
+            
+            <h2>📞 Expressões Recomendadas</h2>
+            
+            <ul>
+                <li>"Este desenho é apenas para apoio à medição em campo"</li>
+                <li>"Não é possível determinar dimensões exatas pela imagem"</li>
+                <li>"A medição em campo é obrigatória para execução"</li>
+                <li>"Lembre-se: 'Quem mede, manda'"</li>
+                <li>"Desenho conceitual para referência visual"</li>
+            </ul>
+            
+            <h2>📚 Consulte Também</h2>
+            
+            <ul>
+                <li><a href="docs.html">Documentação Completa</a></li>
+                <li><a href="regras.html">Regras do Sistema</a></li>
+                <li><a href="exemplo.html">Exemplo Prático</a></li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p><strong>MarmoView v1.0.0</strong> - Dezembro 2025</p>
+            <p>© 2025 i9hubsst-ai. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>

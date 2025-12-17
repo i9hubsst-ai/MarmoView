@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>🪨 MarmoView - Sistema IA para Marmoraria</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --branco-marmore: #F5F5F2;
+            --cinza-claro: #DADADA;
+            --cinza-medio: #9E9E9E;
+            --grafite: #2E2E2E;
+            --jade: #6E8B7F;
+            --jade-claro: #9BB8AE;
+            --areia: #E6E1D8;
+            --ambar: #C9A66B;
+            --terracota: #A45A52;
+            --cinza-claro-2: #E3E3E3;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            min-height: 100vh;
+            padding: 0 0 20px 0;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 10px 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--cinza-medio);
+        }
+
+        .topbar .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .topbar .actions { float: right; display: flex; gap: 10px; }
+        .topbar a { color: var(--branco-marmore); text-decoration: none; font-weight: 600; }
+        
+        .layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 12px;
+            align-items: stretch;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: none;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .content-area {
+            width: 100%;
+        }
+        
+        .sidebar {
+            background: var(--cinza-medio);
+            border-radius: 3px;
+            padding: 3px 16px 16px 16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 0px);
+            overflow: hidden;
+        }
+
+        .sidebar:hover {
+            overflow: auto;
+        }
+
+        .sidebar h2 {
+            color: var(--grafite);
+            font-size: 1.05em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar .nav-group {
+            margin-top: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .sidebar li {
+            margin: 8px 0;
+        }
+
+        .sidebar a {
+            color: var(--grafite);
+            text-decoration: none;
+            font-weight: 600;
+            display: block;
+            padding: 8px 10px;
+            border-radius: 3px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar a:hover {
+            background: var(--areia);
+            color: var(--grafite);
+        }
+        
+        header {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 20px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 1px solid var(--cinza-medio);
+        }
+        
+        h1 {
+            font-size: 1.8em;
+            color: var(--grafite);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .subtitle {
+            font-size: 0.88em;
+            color: var(--grafite);
+            margin-bottom: 20px;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 8px 16px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            margin: 0 5px;
+            margin-top: 15px;
+        }
+        
+        .badge.success { background: var(--jade); }
+        .badge.info { background: var(--jade-claro); color: var(--grafite); }
+        .badge.warning { background: var(--ambar); color: var(--grafite); }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .upload-section {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 14px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            margin-bottom: 3px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 12px;
+            align-items: center;
+            border: 1px solid var(--cinza-medio);
+        }
+
+        .upload-section h2 {
+            color: var(--grafite);
+            margin-bottom: 6px;
+            font-size: 1.25em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .upload-section p {
+            color: var(--grafite);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .dropzone {
+            border: 2px dashed var(--jade);
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+        }
+
+        .dropzone p {
+            margin-bottom: 8px;
+        }
+
+        .upload-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .note {
+            background: var(--areia);
+            border: 1px solid var(--cinza-medio);
+            border-radius: 3px;
+            padding: 10px;
+            color: var(--grafite);
+            font-size: 0.95em;
+        }
+        
+        .card {
+            background: var(--cinza-claro-2);
+            border-radius: 3px;
+            padding: 16px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: 1px solid var(--cinza-medio);
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+        }
+        
+        .card h2 {
+            color: var(--grafite);
+            margin-bottom: 10px;
+            font-size: 1.15em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card p {
+            color: var(--grafite);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            padding: 10px 18px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--jade);
+            cursor: pointer;
+            font-size: 1em;
+        }
+        
+        .btn:hover {
+            background: var(--jade-claro);
+            color: var(--grafite);
+        }
+        
+        .btn-secondary {
+            background: var(--cinza-medio);
+            border-color: var(--cinza-medio);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--areia);
+            color: var(--grafite);
+            border-color: var(--areia);
+        }
+        
+        .rules-section {
+            background: var(--cinza-claro);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+        }
+        
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .rule-item {
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--cinza-medio);
+            background: var(--branco-marmore);
+        }
+        
+        .rule-item.allowed {
+            border-left-color: var(--jade);
+            background: var(--areia);
+        }
+        
+        .rule-item.forbidden {
+            border-left-color: var(--terracota);
+            background: var(--areia);
+        }
+        
+        .rule-item h3 {
+            margin-bottom: 10px;
+            color: var(--grafite);
+        }
+        
+        .rule-item ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .rule-item li {
+            margin: 5px 0;
+            color: var(--grafite);
+        }
+        
+        .rule-item.forbidden li:before {
+            content: "❌ ";
+            margin-right: 5px;
+            color: var(--terracota);
+        }
+        
+        .rule-item.allowed li:before {
+            content: "✓ ";
+            margin-right: 5px;
+            color: var(--jade);
+            font-weight: bold;
+        }
+        
+        footer {
+            background: var(--cinza-claro);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+        
+        form {
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--grafite);
+            margin-bottom: 4px;
+            font-size: 0.9em;
+        }
+
+        .form-group input[type="file"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--cinza-medio);
+            border-radius: 3px;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+            font-family: inherit;
+        }
+
+        .form-group select {
+            cursor: pointer;
+            /* listbox visual consistency */
+            min-height: 120px;
+        }
+
+        .form-group select[multiple],
+        .form-group select[size] {
+            padding: 8px;
+        }
+
+        .form-group select[multiple] option,
+        .form-group select[size] option {
+            padding: 6px 8px;
+            margin: 2px 0;
+            border-radius: 2px;
+        }
+
+        .form-group select[multiple] option:checked,
+        .form-group select[size] option:checked {
+            background: var(--jade) linear-gradient(0deg, var(--jade) 0%, var(--jade) 100%);
+            color: var(--branco-marmore);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .image-preview {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 3px;
+            border: 1px solid var(--cinza-medio);
+        }
+
+        .principle {
+            background: var(--areia);
+            border: 2px solid var(--ambar);
+            border-radius: 3px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: center;
+            font-style: italic;
+            font-size: 1.0em;
+            color: var(--grafite);
+        }
+        
+        .icon {
+            font-size: 2.5em;
+        }
+        
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <script>
+        // Estado da aplicação
+        let currentSessionId = null;
+        let isProcessing = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // Preview de imagens ao selecionar
+        document.getElementById('images').addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            const files = Array.from(e.target.files);
+            console.log(`Total de imagens selecionadas: ${files.length}`);
+            
+            if (files.length === 0) {
+                return;
+            }
+            
+            if (files.length > 5) {
+                alert('Máximo de 5 imagens permitido. Por favor, selecione até 5 imagens.');
+                this.value = '';
+                return;
+            }
+            
+            // Mostra contador
+            const counter = document.createElement('div');
+            counter.style.cssText = 'background: var(--jade); color: white; padding: 8px; border-radius: 3px; margin-bottom: 10px; text-align: center; font-weight: 600;';
+            counter.textContent = `✓ ${files.length} imagem(ns) selecionada(s)`;
+            preview.appendChild(counter);
+            
+            // Processa cada arquivo
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.title = file.name;
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Reset do formulário
+        document.getElementById('uploadForm').addEventListener('reset', function(e) {
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('drawingPreview').style.display = 'none';
+            currentSessionId = null;
+        });
+
+        // Submit do formulário
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (isProcessing) {
+                alert('Aguarde o processamento atual...');
+                return;
+            }
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            try {
+                isProcessing = true;
+                submitBtn.disabled = true;
+                submitBtn.textContent = '⏳ Processando...';
+                
+                // 1. Upload das imagens
+                const formData = new FormData();
+                const imageInput = document.getElementById('images');
+                const files = imageInput.files;
+                
+                console.log(`Iniciando upload de ${files.length} arquivo(s)`);
+                
+                if (files.length === 0) {
+                    alert('Selecione pelo menos uma imagem');
+                    return;
+                }
+                
+                if (files.length > 5) {
+                    alert('Máximo de 5 imagens permitido');
+                    return;
+                }
+                
+                // Adiciona cada imagem ao FormData
+                for (let i = 0; i < files.length; i++) {
+                    console.log(`Adicionando arquivo: ${files[i].name}`);
+                    formData.append('images', files[i]);
+                }
+                
+                // Adiciona dados do formulário
+                formData.append('characteristics', document.getElementById('characteristics').value);
+                formData.append('envType', document.getElementById('envType').value);
+                
+                // Múltiplas seleções
+                const stoneElements = Array.from(document.getElementById('stoneElements').selectedOptions)
+                    .map(opt => opt.value);
+                stoneElements.forEach(el => formData.append('stoneElements', el));
+                
+                formData.append('format', document.getElementById('format').value);
+                
+                const cutouts = Array.from(document.getElementById('cutouts').selectedOptions)
+                    .map(opt => opt.value);
+                cutouts.forEach(cut => formData.append('cutouts', cut));
+                
+                submitBtn.textContent = '⏳ Enviando imagens...';
+                
+                // Upload
+                console.log(`Enviando FormData com ${files.length} arquivo(s)...`);
+                const uploadRes = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log(`Resposta do upload: ${uploadRes.status}`);
+                
+                if (!uploadRes.ok) {
+                    const error = await uploadRes.json();
+                    console.error('Erro no upload:', error);
+                    throw new Error(error.error || 'Erro no upload');
+                }
+                
+                const uploadData = await uploadRes.json();
+                currentSessionId = uploadData.session_id;
+                
+                submitBtn.textContent = '⏳ Gerando desenho...';
+                
+                // 2. Gera o desenho
+                const drawingRes = await fetch(`/api/generate-drawing/${currentSessionId}`, {
+                    method: 'POST'
+                });
+                
+                if (!drawingRes.ok) {
+                    const error = await drawingRes.json();
+                    throw new Error(error.error || 'Erro ao gerar desenho');
+                }
+                
+                const drawingData = await drawingRes.json();
+                
+                // Exibe o desenho gerado
+                console.log('Desenho gerado:', drawingData);
+                
+                const drawingPreview = document.getElementById('drawingPreview');
+                if (drawingPreview) {
+                    drawingPreview.style.display = 'block';
+                    const drawingImg = document.getElementById('drawingImage');
+                    if (drawingImg && drawingData.drawing_url) {
+                        drawingImg.src = drawingData.drawing_url;
+                        console.log('Imagem do desenho carregada:', drawingData.drawing_url);
+                    }
+                    // Scroll para o preview
+                    drawingPreview.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                
+                // Sucesso
+                alert(`✅ Desenho gerado com sucesso!\n\n${uploadData.images_count} imagem(ns) processada(s)\n\nProjeto: #${currentSessionId.slice(0, 8)}\n\nRevise o desenho e clique em "Gerar PDF" se aprovar.`);
+                
+                // Formulário permanece preenchido - NÃO LIMPA
+                
+                } catch (error) {
+                    console.error('Erro:', error);
+                    alert(`❌ Erro: ${error.message}\n\nVerifique se o backend está rodando e acessível.`);
+                } finally {
+                    isProcessing = false;
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            });
+
+            // Botão "Gerar PDF"
+            document.getElementById('generatePdfBtn').addEventListener('click', async function() {
+                if (!currentSessionId) {
+                    alert('⚠️ Nenhuma sessão ativa. Por favor, gere um desenho primeiro.');
+                    return;
+                }
+
+                const btn = this;
+                const originalText = btn.textContent;
+
+                try {
+                    btn.disabled = true;
+                    btn.textContent = '⏳ Gerando PDF...';
+
+                    const pdfRes = await fetch(`/api/generate-pdf/${currentSessionId}`);
+                    
+                    if (!pdfRes.ok) {
+                        throw new Error('Erro ao gerar PDF');
+                    }
+                    
+                    const blob = await pdfRes.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `marmoview_desenho_${currentSessionId.slice(0, 8)}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+
+                    alert('✅ PDF gerado e baixado com sucesso!');
+
+                } catch (error) {
+                    console.error('Erro ao gerar PDF:', error);
+                    alert(`❌ Erro ao gerar PDF: ${error.message}`);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            });
+
+            // Botão "Regenerar Desenho"
+            document.getElementById('regenerateDrawingBtn').addEventListener('click', async function() {
+                if (!currentSessionId) {
+                    alert('⚠️ Nenhuma sessão ativa. Por favor, faça upload de imagens primeiro.');
+                    return;
+                }
+
+                const btn = this;
+                const originalText = btn.textContent;
+
+                try {
+                    btn.disabled = true;
+                    btn.textContent = '⏳ Regenerando...';
+
+                    // Regenera o desenho com a mesma sessão
+                    const drawingRes = await fetch(`/api/generate-drawing/${currentSessionId}`, {
+                        method: 'POST'
+                    });
+                    
+                    if (!drawingRes.ok) {
+                        const error = await drawingRes.json();
+                        throw new Error(error.error || 'Erro ao regenerar desenho');
+                    }
+                    
+                    const drawingData = await drawingRes.json();
+                    
+                    // Atualiza a imagem
+                    const drawingImg = document.getElementById('drawingImage');
+                    if (drawingImg && drawingData.drawing_url) {
+                        drawingImg.src = drawingData.drawing_url + '?t=' + Date.now(); // Cache bust
+                        console.log('Desenho regenerado:', drawingData.drawing_url);
+                    }
+
+                    alert('✅ Desenho regenerado com sucesso!');
+
+                } catch (error) {
+                    console.error('Erro ao regenerar:', error);
+                    alert(`❌ Erro ao regenerar: ${error.message}`);
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            });
+
+        }); // Fecha DOMContentLoaded
+        </script>
+</head>
+<body>
+    <div class="topbar">
+        <span class="brand">🪨 MarmoView</span>
+    </div>
+    <div class="layout container">
+        <aside class="sidebar">
+            <h2><span class="icon">🪨</span> MarmoView</h2>
+            <p style="color:var(--grafite); margin-bottom:10px;">Navegação rápida</p>
+            <div class="nav-group">
+                <strong style="color:var(--grafite);">Seções</strong>
+                <ul>
+                    <li><a href="#upload">Upload / Gerar desenho</a></li>
+                </ul>
+            </div>
+            <div class="nav-group" style="margin-top:20px;">
+                <strong style="color:var(--grafite);">Páginas</strong>
+                <ul>
+                    <li><a href="docs.html">📖 Documentação</a></li>
+                    <li><a href="prompts.html">✏️ Prompts</a></li>
+                    <li><a href="regras.html">📋 Regras</a></li>
+                    <li><a href="exemplo.html">📚 Exemplo</a></li>
+                    <li><a href="config.html">⚙️ Configuração</a></li>
+                    <li><a href="glossario.html">📖 Glossário</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="content-area">
+        <header>
+            <h1><span class="icon">🪨</span> MarmoView</h1>
+            <p class="subtitle">Sistema Inteligente de IA para Marmoraria</p>
+            <div>
+                <span class="badge success">Status: Ativo</span>
+                <span class="badge info">v1.0.0</span>
+                <span class="badge warning">Proprietária</span>
+            </div>
+        </header>
+
+        <section id="upload" class="upload-section">
+            <div style="grid-column: 1 / -1;">
+                <h2>📤 Análise de Ambiente & Geração de Desenho</h2>
+                <p>Envie uma ou mais imagens do ambiente e detalhe as características para que a IA gere um desenho conceitual otimizado para medição em campo.</p>
+                <div class="note">
+                    Lembrete: Sem cotas ou medidas. Desenho é conceitual e requer medição em campo.
+                </div>
+            </div>
+
+            <form id="uploadForm" style="grid-column: 1 / -1;">
+                <!-- Upload de Imagens -->
+                <div class="form-group">
+                    <label for="images">📷 Imagens do Ambiente (múltiplas)</label>
+                    <input type="file" id="images" name="images" accept="image/*" multiple required>
+                    <p style="font-size:0.85em; color:var(--cinza-medio); margin-top:6px;">
+                        <strong>Para selecionar múltiplas imagens:</strong> Segure Ctrl (Cmd no Mac) e clique nas imagens, ou selecione a primeira e segure Shift ao clicar na última.<br>
+                        Formatos: JPG, PNG (até 5 imagens, máx 10MB cada)
+                    </p>
+                    <div class="image-preview" id="imagePreview"></div>
+                </div>
+
+                <!-- Características do Ambiente -->
+                <div class="form-group">
+                    <label for="characteristics">💭 Características Visuais do Ambiente</label>
+                    <textarea id="characteristics" name="characteristics" placeholder="Descreva: profundidade estimada, acabamentos visíveis, cores, distribuição de iluminação, qualquer detalhe que ajude na análise..." required></textarea>
+                    <p style="font-size:0.85em; color:var(--cinza-medio); margin-top:6px;">Seu olhar é valioso para a qualidade do desenho</p>
+                </div>
+
+                <!-- Linha 1: Tipo de Ambiente e Elementos -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="envType">🏠 Tipo de Ambiente <span style="font-size:0.8em; color:var(--cinza-medio);">(única escolha)</span></label>
+                        <select id="envType" name="envType" required size="6">
+                            <option value="">-- Selecione --</option>
+                            <option value="cozinha">Cozinha Residencial</option>
+                            <option value="cozinha-comercial">Cozinha Comercial</option>
+                            <option value="banheiro">Banheiro</option>
+                            <option value="area-gourmet">Área Gourmet</option>
+                            <option value="lavabo">Lavabo</option>
+                            <option value="sala">Sala</option>
+                            <option value="varanda">Varanda / Sacada</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="stoneElements">🪨 Elementos em Pedra a Desenhar <span style="font-size:0.8em; color:var(--cinza-medio);">(múltipla seleção)</span></label>
+                        <select id="stoneElements" name="stoneElements" multiple required size="6">
+                            <option value="bancada">Bancada</option>
+                            <option value="tampo">Tampo / Balcão</option>
+                            <option value="ilha">Ilha Central</option>
+                            <option value="fachada">Fachada / Frontal</option>
+                            <option value="nicho">Nicho / Prateleira</option>
+                            <option value="piso">Piso</option>
+                            <option value="mosaico">Mosaico / Painel</option>
+                        </select>
+                        <p style="font-size:0.85em; color:var(--cinza-medio); margin-top:6px;">Segure Ctrl (Cmd no Mac) para selecionar múltiplos</p>
+                    </div>
+                </div>
+
+                <!-- Linha 2: Formato e Recortes -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="format">📐 Formato Predominante <span style="font-size:0.8em; color:var(--cinza-medio);">(única escolha)</span></label>
+                        <select id="format" name="format" required size="6">
+                            <option value="">-- Selecione --</option>
+                            <option value="reto">Reto / Linear</option>
+                            <option value="l">L</option>
+                            <option value="u">U</option>
+                            <option value="ilha">Ilha Central</option>
+                            <option value="pensula">Península</option>
+                            <option value="irregular">Irregular</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cutouts">✂️ Recortes Aparentes <span style="font-size:0.8em; color:var(--cinza-medio);">(múltipla seleção)</span></label>
+                        <select id="cutouts" name="cutouts" multiple required size="6">
+                            <option value="pia">Pia / Cuba</option>
+                            <option value="cooktop">Cooktop / Fogão</option>
+                            <option value="forno">Forno</option>
+                            <option value="torneira">Torneira</option>
+                            <option value="saboneteira">Saboneteira / Dispenser</option>
+                            <option value="tomada">Tomadas / Interruptores</option>
+                            <option value="nenhum">Nenhum visível</option>
+                        </select>
+                        <p style="font-size:0.85em; color:var(--cinza-medio); margin-top:6px;">Segure Ctrl (Cmd no Mac) para selecionar múltiplos</p>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação -->
+                <div style="display: flex; gap: 12px; margin-top: 16px;">
+                    <button type="submit" class="btn">🚀 Gerar Desenho Conceitual</button>
+                    <button type="reset" class="btn btn-secondary">🔄 Limpar Formulário</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Área de Preview do Desenho Gerado -->
+        <section id="drawingPreview" style="display: none; background: var(--cinza-claro); border-radius: 3px; padding: 14px; margin-top: 3px; box-shadow: 0 8px 22px rgba(0,0,0,0.08); border: 1px solid var(--cinza-medio);">
+            <h2 style="color: var(--grafite); margin-bottom: 10px; font-size: 1.25em;">🎨 Desenho Conceitual Gerado</h2>
+            <div style="background: var(--branco-marmore); border-radius: 3px; padding: 12px; text-align: center;">
+                <img id="drawingImage" src="" alt="Desenho Gerado" style="max-width: 100%; height: auto; border-radius: 3px; border: 1px solid var(--cinza-medio);">
+            </div>
+            <p style="font-size:0.85em; color:var(--cinza-medio); margin-top:8px; text-align: center;">Desenho conceitual para apoio à medição em campo. Não utilize para fabricação.</p>
+            
+            <!-- Botões de Ação no Preview -->
+            <div style="display: flex; gap: 12px; margin-top: 16px; justify-content: center;">
+                <button id="generatePdfBtn" class="btn">📄 Gerar PDF</button>
+                <button id="regenerateDrawingBtn" class="btn btn-secondary">🔄 Regenerar Desenho</button>
+            </div>
+        </section>
+        
+        
+        
+        <footer>
+            <p><strong>MarmoView v1.0.0</strong> - Dezembro 2025</p>
+            <p>Desenvolvido com precisão técnica e respeito ao ofício tradicional</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">© 2025 i9hubsst-ai. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>

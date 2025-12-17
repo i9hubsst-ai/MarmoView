@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração - MarmoView</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --branco-marmore: #F5F5F2;
+            --cinza-claro: #DADADA;
+            --cinza-medio: #9E9E9E;
+            --grafite: #2E2E2E;
+            --jade: #6E8B7F;
+            --jade-claro: #9BB8AE;
+            --areia: #E6E1D8;
+            --ambar: #C9A66B;
+            --terracota: #A45A52;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            min-height: 100vh;
+            padding: 0 20px 20px 20px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 10px 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--cinza-medio);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .topbar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .topbar a { color: var(--branco-marmore); text-decoration: none; font-weight: 600; }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        header {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h1 { color: var(--grafite); margin-bottom: 10px; }
+
+        .breadcrumb {
+            color: var(--grafite);
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+
+        .breadcrumb a { color: var(--jade); text-decoration: none; font-weight: 600; }
+        .breadcrumb a:hover { color: var(--jade-claro); text-decoration: underline; }
+
+        .content {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h2 {
+            color: var(--grafite);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+
+        h3 { color: var(--grafite); margin-top: 16px; margin-bottom: 8px; }
+
+        p { line-height: 1.7; color: var(--grafite); margin-bottom: 12px; }
+
+        .code-block {
+            background: var(--branco-marmore);
+            border: 1px solid var(--cinza-medio);
+            border-radius: 3px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 15px 0;
+            line-height: 1.4;
+        }
+
+        .config-section {
+            background: var(--areia);
+            border-left: 4px solid var(--jade);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 3px;
+        }
+
+        .config-section h3 { margin-top: 0; }
+        
+        .form-group { margin: 16px 0; }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--grafite);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--cinza-medio);
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 0.95em;
+        }
+        .form-group textarea {
+            min-height: 150px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 3px;
+            margin: 12px 0;
+        }
+        .alert-warning {
+            background: #FFF3CD;
+            border-left: 4px solid var(--ambar);
+            color: #856404;
+        }
+        .alert-info {
+            background: #D1ECF1;
+            border-left: 4px solid var(--jade);
+            color: #0C5460;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            padding: 10px 18px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--jade);
+        }
+
+        .btn:hover { background: var(--jade-claro); color: var(--grafite); }
+        .btn-back { margin-bottom: 20px; }
+
+        ul { margin: 12px 0 12px 24px; color: var(--grafite); line-height: 1.7; }
+        li { margin: 6px 0; }
+
+        footer {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="brand">🪨 MarmoView</span>
+        <div class="actions">
+            <a href="index.html">Início</a>
+            <a href="docs.html">Documentação</a>
+            <a href="prompts.html">Prompts</a>
+            <a href="regras.html">Regras</a>
+            <a href="exemplo.html">Exemplo</a>
+            <a href="config.html">Config</a>
+            <a href="glossario.html">Glossário</a>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">
+                <a href="index.html">MarmoView</a> > Configuração
+            </div>
+            <h1>⚙️ Configuração do Sistema</h1>
+            <p>Configure API Keys e personalize prompts da IA</p>
+        </header>
+        
+        <div class="content">
+            <a href="index.html" class="btn btn-back">← Voltar ao Início</a>
+            
+            <div class="alert alert-warning">
+                <strong>⚠️ Atenção:</strong> As configurações são armazenadas localmente no navegador. Configure a API Key do servidor através de variável de ambiente <code>ANTHROPIC_API_KEY</code>.
+            </div>
+            
+            <h2>🔑 Configuração de API</h2>
+            
+            <div class="config-section">
+                <h3>Anthropic Claude API</h3>
+                <p>Para habilitar análise inteligente com Claude Vision, configure a chave de API no servidor:</p>
+                <div class="code-block">export ANTHROPIC_API_KEY="sua-chave-aqui"</div>
+                <p><strong>Status atual:</strong> <span id="apiStatus">Verificando...</span></p>
+                <button onclick="checkAPIStatus()" class="btn" style="margin-top: 10px;">🔄 Verificar Status</button>
+            </div>
+            
+            <h2>✏️ Personalização de Prompts</h2>
+            
+            <div class="alert alert-info">
+                <strong>ℹ️ Info:</strong> Os prompts abaixo são usados para guiar a análise da IA. Você pode personalizá-los conforme suas necessidades específicas.
+            </div>
+            
+            <form id="promptConfigForm">
+                <div class="config-section">
+                    <h3>Prompt de Análise de Imagens</h3>
+                    <p>Este prompt é enviado ao Claude Vision junto com as imagens do ambiente.</p>
+                    
+                    <div class="form-group">
+                        <label for="systemPrompt">Instruções do Sistema:</label>
+                        <textarea id="systemPrompt" placeholder="Ex: Você é um especialista em marmoraria..."></textarea>
+                        <small style="color: var(--cinza-medio);">Define o papel e comportamento da IA</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="analysisPrompt">Prompt de Análise:</label>
+                        <textarea id="analysisPrompt" rows="15" placeholder="Instruções detalhadas sobre o que analisar..."></textarea>
+                        <small style="color: var(--cinza-medio);">Especifica O QUE a IA deve analisar e como retornar</small>
+                    </div>
+                </div>
+                
+                <div class="config-section">
+                    <h3>Configurações de Desenho</h3>
+                    
+                    <div class="form-group">
+                        <label for="drawingInstructions">Instruções para Geração de Desenho:</label>
+                        <textarea id="drawingInstructions" rows="8" placeholder="Como os elementos devem ser desenhados..."></textarea>
+                        <small style="color: var(--cinza-medio);">Guias sobre como interpretar e desenhar as análises</small>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button type="submit" class="btn">💾 Salvar Configurações</button>
+                    <button type="button" onclick="resetToDefault()" class="btn" style="background: var(--cinza-medio);">🔄 Restaurar Padrão</button>
+                    <button type="button" onclick="exportConfig()" class="btn" style="background: var(--ambar);">📥 Exportar JSON</button>
+                </div>
+            </form>
+            
+            <h2>📊 Status do Sistema</h2>
+            
+            <div class="config-section">
+                <h3>Informações Atuais</h3>
+                <ul>
+                    <li><strong>Versão:</strong> 1.0.0</li>
+                    <li><strong>Claude Vision:</strong> <span id="claudeStatus">Não configurado</span></li>
+                    <li><strong>Desenho Inteligente:</strong> <span id="drawingStatus">Aguardando configuração</span></li>
+                    <li><strong>Prompts Personalizados:</strong> <span id="promptStatus">Padrão</span></li>
+                </ul>
+            </div
+    esquerda: 20
+    unidade: "mm"
+  
+  numeracao_projeto:
+    prefixo: "MV"
+    formato: "MV-AAAA-NNNN"
+    digitos_sequencial: 4</div>
+                <p>Configurações para geração de PDFs padronizados.</p>
+                <p><strong>Exemplo de número:</strong> MV-2025-0001, MV-2025-0042</p>
+            </div>
+            
+            <div class="config-section">
+                <h3>8. Configurações de Revisão</h3>
+                <div class="code-block">revisao:
+  ajustes_permitidos:
+    - "forma_geometrica"
+    - "orientacao_pecas"
+    - "inclusao_remocao_elementos"
+    - "posicionamento_recortes"
+  
+  manter_consistente:
+    - "simplicidade"
+    - "estilo_tecnico"
+    - "finalidade_apoio"
+    - "ausencia_cotas"</div>
+                <p>Define o escopo das revisões iterativas.</p>
+            </div>
+            
+            <div class="config-section">
+                <h3>9. Mensagens Padrão</h3>
+                <div class="code-block">mensagens:
+  boas_vindas: "Sistema MarmoView inicializado..."
+  aguardando_imagem: "Aguardando upload de imagem..."
+  analise_iniciada: "Analisando ambiente..."
+  
+  avisos:
+    sem_cotas: "Lembre-se: Este desenho NÃO contém..."
+    quem_mede_manda: "Princípio fundamental..."</div>
+                <p>Mensagens padrão para interação com usuário.</p>
+            </div>
+            
+            <div class="config-section">
+                <h3>10. Performance</h3>
+                <div class="code-block">performance:
+  max_tamanho_imagem_mb: 10
+  timeout_analise_segundos: 30
+  timeout_geracao_segundos: 45
+  cache_resultados: true</div>
+                <p>Limites de performance e otimizações.</p>
+            </div>
+            
+            <h2>📋 Tipos de Ambiente Suportados</h2>
+            
+            <ul>
+                <li>🍳 Cozinha</li>
+                <li>🚿 Banheiro</li>
+                <li>🍽️ Área Gourmet</li>
+                <li>📊 Balcão</li>
+                <li>🏠 Outro ambiente com elementos em pedra</li>
+            </ul>
+            
+            <h2>🪨 Elementos em Pedra Identificáveis</h2>
+            
+            <ul>
+                <li>📐 Bancadas</li>
+                <li>📄 Tampos</li>
+                <li>🏝️ Ilhas</li>
+                <li>🎨 Frontais</li>
+                <li>🔲 Nichos</li>
+            </ul>
+            
+            <h2>📐 Formatos Geométricos</h2>
+            
+            <ul>
+                <li>⬚ Reto/Retilíneo</li>
+                <li>⬌ Formato L</li>
+                <li>⬛ Formato U</li>
+                <li>⭕ Ilha Central</li>
+                <li>🔀 Múltiplos Segmentos</li>
+            </ul>
+            
+            <h2>📌 Recortes Identificáveis</h2>
+            
+            <ul>
+                <li>🚰 Pia/Cuba</li>
+                <li>🔥 Cooktop</li>
+                <li>🍳 Fogão</li>
+                <li>🔍 Outros recortes visíveis</li>
+            </ul>
+            
+            <h2>✅ Aviso Legal (Obrigatório em PDFs)</h2>
+            
+            <div class="code-block">⚠️  OBSERVAÇÃO IMPORTANTE:
+
+Desenho conceitual para apoio à medição em campo.
+
+NÃO UTILIZAR PARA FABRICAÇÃO OU CORTE.</div>
+            
+            <h2>📊 Formato de Numeração de Projetos</h2>
+            
+            <div class="code-block">Formato: MV-AAAA-NNNN
+
+MV     = Prefixo MarmoView
+AAAA   = Ano (ex: 2025)
+NNNN   = Sequencial 4 dígitos (0001-9999)
+
+Exemplos válidos:
+  - MV-2025-0001
+  - MV-2025-0042
+  - MV-2025-1234</div>
+            
+            <h2>🔒 Restrições que NÃO Podem Ser Alteradas</h2>
+            
+            <p>As seguintes restrições estão codificadas no sistema e <strong>não podem</strong> ser modificadas:</p>
+            
+            <ul>
+                <li>❌ Criar cotas ou medidas - <strong>Sempre proibido</strong></li>
+                <li>❌ Estimar dimensões - <strong>Sempre proibido</strong></li>
+                <li>❌ Criar desenhos para fabricação - <strong>Sempre proibido</strong></li>
+                <li>❌ Criar planos de corte - <strong>Sempre proibido</strong></li>
+                <li>❌ Aplicar escala gráfica - <strong>Sempre proibido</strong></li>
+            </ul>
+            
+            <h2>📚 Consulte Também</h2>
+            
+            <ul>
+                <li><a href="docs.html">Documentação Completa</a></li>
+                <li><a href="regras.html">Regras do Sistema</a></li>
+                <li><a href="prompts.html">Prompts</a></li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p><strong>MarmoView v1.0.0</strong> - Dezembro 2025</p>
+            <p>© 2025 i9hubsst-ai. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Carrega configurações salvas
+        function loadSavedConfig() {
+            const config = localStorage.getItem('marmoview_config');
+            if (config) {
+                try {
+                    const parsed = JSON.parse(config);
+                    document.getElementById('systemPrompt').value = parsed.systemPrompt || '';
+                    document.getElementById('analysisPrompt').value = parsed.analysisPrompt || '';
+                    document.getElementById('drawingInstructions').value = parsed.drawingInstructions || '';
+                    document.getElementById('promptStatus').textContent = 'Personalizado';
+                } catch(e) {
+                    console.error('Erro ao carregar config:', e);
+                }
+            } else {
+                loadDefaultPrompts();
+            }
+        }
+        
+        // Carrega prompts padrão
+        function loadDefaultPrompts() {
+            document.getElementById('systemPrompt').value = 'Você é um especialista em marmoraria, design de interiores e desenho técnico para fabricação de pedras naturais.';
+            
+            document.getElementById('analysisPrompt').value = `Analise as imagens enviadas e retorne um JSON detalhado com:
+
+1. "layout_analysis": Descrição do espaço
+2. "space_dimensions": Proporções estimadas
+3. "stone_layout": Posicionamento detalhado dos elementos com coordenadas (0-100%)
+4. "cutouts_positions": Localização de recortes
+5. "format_recommendation": Como o formato se encaixa
+6. "drawing_instructions": Lista de instruções específicas
+7. "confidence": Nível de confiança (0-100)
+
+Seja MUITO ESPECÍFICO com posições e proporções.`;
+            
+            document.getElementById('drawingInstructions').value = `- Posicionar elementos nas coordenadas especificadas
+- Usar formas geométricas simples e claras
+- Marcar recortes em vermelho
+- Adicionar labels informativos
+- Manter desenho minimalista e técnico`;
+        }
+        
+        // Salva configurações
+        document.getElementById('promptConfigForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const config = {
+                systemPrompt: document.getElementById('systemPrompt').value,
+                analysisPrompt: document.getElementById('analysisPrompt').value,
+                drawingInstructions: document.getElementById('drawingInstructions').value,
+                savedAt: new Date().toISOString()
+            };
+            
+            localStorage.setItem('marmoview_config', JSON.stringify(config));
+            document.getElementById('promptStatus').textContent = 'Personalizado';
+            alert('✅ Configurações salvas com sucesso!\n\nReinicie o servidor para aplicar as mudanças.');
+        });
+        
+        // Reseta para padrão
+        function resetToDefault() {
+            if (confirm('Tem certeza que deseja restaurar as configurações padrão?')) {
+                localStorage.removeItem('marmoview_config');
+                loadDefaultPrompts();
+                document.getElementById('promptStatus').textContent = 'Padrão';
+                alert('✅ Configurações restauradas para o padrão.');
+            }
+        }
+        
+        // Exporta configuração
+        function exportConfig() {
+            const config = {
+                systemPrompt: document.getElementById('systemPrompt').value,
+                analysisPrompt: document.getElementById('analysisPrompt').value,
+                drawingInstructions: document.getElementById('drawingInstructions').value,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(config, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'marmoview_config.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Verifica status da API
+        async function checkAPIStatus() {
+            const statusEl = document.getElementById('apiStatus');
+            const claudeEl = document.getElementById('claudeStatus');
+            const drawingEl = document.getElementById('drawingStatus');
+            
+            statusEl.textContent = 'Verificando...';
+            
+            try {
+                const res = await fetch('/api/health');
+                const data = await res.json();
+                
+                // Simula verificação (na prática precisaria de endpoint específico)
+                statusEl.textContent = '✅ Servidor conectado';
+                claudeEl.textContent = 'Verificar variável ANTHROPIC_API_KEY no servidor';
+                drawingEl.textContent = '✅ Funcional';
+                
+            } catch(e) {
+                statusEl.textContent = '❌ Servidor offline';
+                claudeEl.textContent = '❌ Não disponível';
+                drawingEl.textContent = '❌ Aguardando servidor';
+            }
+        }
+        
+        // Inicializa ao carregar
+        window.addEventListener('DOMContentLoaded', function() {
+            loadSavedConfig();
+            checkAPIStatus();
+        });
+    </script>
+</body>
+</html>

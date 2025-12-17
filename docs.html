@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação - MarmoView</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --branco-marmore: #F5F5F2;
+            --cinza-claro: #DADADA;
+            --cinza-medio: #9E9E9E;
+            --grafite: #2E2E2E;
+            --jade: #6E8B7F;
+            --jade-claro: #9BB8AE;
+            --areia: #E6E1D8;
+            --ambar: #C9A66B;
+            --terracota: #A45A52;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            min-height: 100vh;
+            padding: 0 20px 20px 20px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 10px 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--cinza-medio);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .topbar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .topbar a { color: var(--branco-marmore); text-decoration: none; font-weight: 600; }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+        }
+        
+        h1 {
+            color: var(--grafite);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .breadcrumb {
+            color: var(--grafite);
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+        
+        .breadcrumb a {
+            color: var(--jade);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .breadcrumb a:hover {
+            color: var(--jade-claro);
+            text-decoration: underline;
+        }
+        
+        .content {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border: 1px solid var(--cinza-medio);
+        }
+        
+        h2 {
+            color: var(--grafite);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+        
+        h3 {
+            color: var(--grafite);
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        
+        p {
+            line-height: 1.8;
+            color: var(--grafite);
+            margin-bottom: 12px;
+        }
+        
+        ul, ol {
+            margin: 15px 0 15px 30px;
+            color: var(--grafite);
+            line-height: 1.7;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+
+        .doc-section {
+            background: var(--areia);
+            border-left: 4px solid var(--jade);
+            padding: 12px;
+            margin: 16px 0;
+            border-radius: 3px;
+        }
+        
+        .doc-section h4 {
+            color: var(--grafite);
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            padding: 10px 18px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--jade);
+        }
+        
+        .btn:hover {
+            background: var(--jade-claro);
+            color: var(--grafite);
+        }
+        
+        .btn-back {
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background: var(--cinza-claro);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="brand">🪨 MarmoView</span>
+        <div class="actions">
+            <a href="index.html">Início</a>
+            <a href="docs.html">Documentação</a>
+            <a href="prompts.html">Prompts</a>
+            <a href="regras.html">Regras</a>
+            <a href="exemplo.html">Exemplo</a>
+            <a href="config.html">Config</a>
+            <a href="glossario.html">Glossário</a>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">
+                <a href="index.html">MarmoView</a> > Documentação
+            </div>
+            <h1>📖 Documentação Completa</h1>
+            <p>Guia técnico do sistema MarmoView</p>
+        </header>
+        
+        <div class="content">
+            <a href="index.html" class="btn btn-back">← Voltar ao Início</a>
+            
+            <h2>🏛️ Sobre o MarmoView</h2>
+            
+            <p>O <strong>MarmoView</strong> é um motor de inteligência artificial projetado para atuar como especialista em:</p>
+            <ul>
+                <li>🏗️ Marmoraria e trabalho com pedras naturais</li>
+                <li>🏛️ Interpretação de ambientes arquitetônicos</li>
+                <li>📸 Leitura visual de imagens técnicas</li>
+                <li>✏️ Geração de desenhos conceituais simplificados</li>
+            </ul>
+            
+            <h2>🎯 Objetivo Principal</h2>
+            
+            <p>Analisar imagens reais (fotos, PDFs ou scans) de ambientes que possuem elementos em <strong>granito</strong>, <strong>mármore</strong> ou <strong>pedras similares</strong> e gerar <strong>representações gráficas simplificadas</strong> para apoio à medição em campo.</p>
+            
+            <div class="doc-section">
+                <h4>⚠️ Importante</h4>
+                <p>O MarmoView <strong>NÃO é um sistema de fabricação</strong>. É um organizador visual que reduz erro humano e padroniza a leitura de ambientes.</p>
+            </div>
+            
+            <h2>🚀 Funcionalidades Principais</h2>
+            
+            <h3>1. Análise de Imagens</h3>
+            <ul>
+                <li>Identificação de tipo de ambiente (cozinha, banheiro, área gourmet, etc.)</li>
+                <li>Detecção de elementos em pedra (bancadas, tampos, ilhas)</li>
+                <li>Reconhecimento de formato geométrico (reto, L, U, ilha)</li>
+                <li>Identificação de recortes (pia, cooktop, cuba)</li>
+            </ul>
+            
+            <h3>2. Geração de Desenhos Conceituais</h3>
+            <ul>
+                <li>Desenhos técnicos minimalistas</li>
+                <li>Planta 2D vista superior OU perspectiva isométrica</li>
+                <li>Sem cotas, medidas ou dimensões</li>
+                <li>Estilo limpo e profissional</li>
+            </ul>
+            
+            <h3>3. Revisão Iterativa</h3>
+            <ul>
+                <li>Ajustes baseados em feedback do usuário</li>
+                <li>Correção de formas e orientações</li>
+                <li>Inclusão/remoção de elementos</li>
+            </ul>
+            
+            <h3>4. Exportação em PDF</h3>
+            <ul>
+                <li>Formato padronizado A4</li>
+                <li>Cabeçalho com identificação do projeto</li>
+                <li>Aviso legal obrigatório</li>
+                <li>Área para anotações de campo</li>
+            </ul>
+            
+            <h2>📋 Documentação Disponível</h2>
+            
+            <div class="doc-section">
+                <h4>Regras do Sistema</h4>
+                <p>Arquivo: <code>docs/REGRAS_SISTEMA.md</code></p>
+                <p>Contém todas as regras obrigatórias, proibições e requisitos que guiam o comportamento da IA.</p>
+            </div>
+            
+            <div class="doc-section">
+                <h4>Prompt Principal</h4>
+                <p>Arquivo: <code>docs/PROMPT_PRINCIPAL.md</code></p>
+                <p>Prompt completo que define a identidade, comportamento e fluxo de trabalho do sistema.</p>
+            </div>
+            
+            <div class="doc-section">
+                <h4>Glossário Técnico</h4>
+                <p>Arquivo: <code>docs/GLOSSARIO.md</code></p>
+                <p>Termos técnicos de marmoraria e do sistema MarmoView com definições precisas.</p>
+            </div>
+            
+            <h2>📁 Estrutura de Diretórios</h2>
+            
+            <pre style="background: var(--branco-marmore); padding: 12px; border-radius: 3px; overflow-x: auto; color: var(--grafite); border: 1px solid var(--cinza-medio);">
+MarmoView/
+├── README.md                    (Documentação principal)
+├── LICENSE.md                   (Licença proprietária)
+├── index.html                   (Interface principal)
+├── docs/
+│   ├── REGRAS_SISTEMA.md       (Regras obrigatórias)
+│   ├── PROMPT_PRINCIPAL.md     (Prompt completo)
+│   └── GLOSSARIO.md            (Glossário técnico)
+├── prompts/
+│   ├── 01_analise_arquivo.md   (Análise de imagem)
+│   ├── 02_geracao_desenho.md   (Geração de desenho)
+│   ├── 03_revisao_iterativa.md (Revisão e ajustes)
+│   └── 04_saida_final.md       (Exportação PDF)
+├── config/
+│   └── sistema_config.yaml     (Configurações)
+└── examples/
+    └── exemplo_projeto.md      (Caso de uso completo)
+            </pre>
+            
+            <h2>🔧 Como Usar o MarmoView</h2>
+            
+            <h3>Passo 1: Enviar Imagem</h3>
+            <p>Envie uma foto, PDF ou scan do ambiente que contém elementos em pedra.</p>
+            
+            <h3>Passo 2: Análise Automática</h3>
+            <p>O sistema identifica tipo de ambiente, elementos em pedra, formato geométrico e recortes.</p>
+            
+            <h3>Passo 3: Geração do Desenho</h3>
+            <p>O MarmoView gera um desenho conceitual técnico sem dimensões.</p>
+            
+            <h3>Passo 4: Revisão (se necessário)</h3>
+            <p>Você pode solicitar ajustes na forma, orientação ou elementos.</p>
+            
+            <h3>Passo 5: Exportação</h3>
+            <p>Receba o PDF padronizado pronto para uso em campo.</p>
+            
+            <h2>🏆 Princípio Fundamental</h2>
+            
+            <div style="background: var(--areia); border: 1px solid var(--ambar); border-radius: 3px; padding: 16px; text-align: center; margin: 16px 0;">
+                <p style="font-size: 1.2em; font-style: italic; color: #856404;">
+                    "O MarmoView é um organizador visual e redutor de erro humano.<br>
+                    <strong>Quem mede, manda.</strong>"
+                </p>
+            </div>
+            
+            <h2>📞 Suporte</h2>
+            
+            <p>Para mais informações, consulte:</p>
+            <ul>
+                <li><a href="regras.html">Regras e Restrições</a></li>
+                <li><a href="prompts.html">Prompts do Sistema</a></li>
+                <li><a href="exemplo.html">Exemplo Prático</a></li>
+                <li><a href="config.html">Configurações</a></li>
+                <li><a href="glossario.html">Glossário Técnico</a></li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p><strong>MarmoView v1.0.0</strong> - Dezembro 2025</p>
+            <p>© 2025 i9hubsst-ai. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>

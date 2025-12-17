@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regras - MarmoView</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --branco-marmore: #F5F5F2;
+            --cinza-claro: #DADADA;
+            --cinza-medio: #9E9E9E;
+            --grafite: #2E2E2E;
+            --jade: #6E8B7F;
+            --jade-claro: #9BB8AE;
+            --areia: #E6E1D8;
+            --ambar: #C9A66B;
+            --terracota: #A45A52;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--branco-marmore);
+            color: var(--grafite);
+            min-height: 100vh;
+            padding: 0 20px 20px 20px;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: var(--cinza-medio);
+            color: var(--branco-marmore);
+            padding: 10px 16px;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--cinza-medio);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .topbar .brand { font-weight: 700; letter-spacing: 0.3px; }
+        .topbar .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        .topbar a { color: var(--branco-marmore); text-decoration: none; font-weight: 600; }
+
+        .container { max-width: 1000px; margin: 0 auto; }
+
+        header {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h1 { color: var(--grafite); margin-bottom: 10px; }
+
+        .breadcrumb {
+            color: var(--grafite);
+            font-size: 0.85em;
+            margin-bottom: 12px;
+        }
+
+        .breadcrumb a { color: var(--jade); text-decoration: none; font-weight: 600; }
+        .breadcrumb a:hover { color: var(--jade-claro); text-decoration: underline; }
+
+        .content {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 24px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            border: 1px solid var(--cinza-medio);
+        }
+
+        h2 {
+            color: var(--grafite);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--cinza-medio);
+        }
+
+        p { line-height: 1.7; color: var(--grafite); margin-bottom: 12px; }
+
+        ul { margin: 12px 0 12px 24px; color: var(--grafite); line-height: 1.7; }
+        li { margin: 10px 0; }
+
+        .rule-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .rule-box {
+            padding: 16px;
+            border-radius: 3px;
+            border-left: 4px solid;
+            background: var(--areia);
+        }
+
+        .forbidden { border-left-color: var(--terracota); }
+        .allowed { border-left-color: var(--jade); }
+
+        .rule-box h3 { color: var(--grafite); margin-bottom: 15px; }
+
+        .rule-box li:before { margin-right: 8px; font-weight: bold; }
+        .forbidden li:before { content: "❌"; color: var(--terracota); }
+        .allowed li:before { content: "✓"; color: var(--jade); }
+
+        .highlight {
+            background: var(--areia);
+            border: 1px solid var(--ambar);
+            border-radius: 3px;
+            padding: 16px;
+            margin: 20px 0;
+            color: var(--grafite);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--jade);
+            color: var(--branco-marmore);
+            padding: 10px 18px;
+            border-radius: 3px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+            border: 1px solid var(--jade);
+        }
+
+        .btn:hover { background: var(--jade-claro); color: var(--grafite); }
+        .btn-back { margin-bottom: 20px; }
+
+        footer {
+            background: var(--cinza-claro);
+            border-radius: 3px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+            color: var(--grafite);
+            border: 1px solid var(--cinza-medio);
+        }
+
+        @media (max-width: 768px) { .rule-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <span class="brand">🪨 MarmoView</span>
+        <div class="actions">
+            <a href="index.html">Início</a>
+            <a href="docs.html">Documentação</a>
+            <a href="prompts.html">Prompts</a>
+            <a href="regras.html">Regras</a>
+            <a href="exemplo.html">Exemplo</a>
+            <a href="config.html">Config</a>
+            <a href="glossario.html">Glossário</a>
+        </div>
+    </div>
+    <div class="container">
+        <header>
+            <div class="breadcrumb">
+                <a href="index.html">MarmoView</a> > Regras e Restrições
+            </div>
+            <h1>📋 Regras Obrigatórias do Sistema</h1>
+            <p>Restrições e requisitos que guiam o comportamento da IA</p>
+        </header>
+        
+        <div class="content">
+            <a href="index.html" class="btn btn-back">← Voltar ao Início</a>
+            
+            <h2>🔑 Regras Fundamentais</h2>
+            
+            <div class="rule-grid">
+                <div class="rule-box forbidden">
+                    <h3>⛔ É EXPRESSAMENTE PROIBIDO:</h3>
+                    <ul>
+                        <li>Criar cotas ou medidas</li>
+                        <li>Estimar dimensões</li>
+                        <li>Criar detalhamento construtivo</li>
+                        <li>Criar desenhos para fabricação</li>
+                        <li>Criar planos de corte ou nesting</li>
+                        <li>Aplicar escala gráfica ou numérica</li>
+                    </ul>
+                </div>
+                
+                <div class="rule-box allowed">
+                    <h3>✅ É OBRIGATÓRIO:</h3>
+                    <ul>
+                        <li>Interpretar apenas o visível</li>
+                        <li>Manter desenho simples e técnico</li>
+                        <li>Usar formas geométricas básicas</li>
+                        <li>Tratar como rascunho técnico</li>
+                        <li>Incluir aviso legal (em PDFs)</li>
+                        <li>Apoiar medição em campo</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>⛔ Restrições Absolutas</h2>
+            
+            <h3>Nunca forneça dimensões</h3>
+            <p>É absolutamente proibido fornecer qualquer dimensão ou estimativa dimensional, como:</p>
+            <ul>
+                <li>❌ "Esta bancada tem aproximadamente 2,40m"</li>
+                <li>❌ "O cooktop mede 60cm"</li>
+                <li>❌ "Profundidade estimada em 60cm"</li>
+                <li>❌ Aplicar escala (1:50, 1:100, etc.)</li>
+            </ul>
+            
+            <h3>Não crie para fabricação</h3>
+            <p>Os desenhos devem ser explicitamente para apoio à medição, não para execução:</p>
+            <ul>
+                <li>❌ Não detalhe cortes</li>
+                <li>❌ Não especifique processos</li>
+                <li>❌ Não indique acabamentos</li>
+                <li>❌ Não crie planos de nesting</li>
+            </ul>
+            
+            <h3>Mantenha simplicidade</h3>
+            <p>O desenho deve ser apenas um organizador visual, não um projeto executivo:</p>
+            <ul>
+                <li>❌ Não inclua elementos decorativos</li>
+                <li>❌ Não mostre texturas ou cores</li>
+                <li>❌ Não crie perspectiva realista</li>
+                <li>❌ Não adicione sombras ou gradientes</li>
+            </ul>
+            
+            <div class="highlight">
+                <h3 style="color: #856404;">⚠️ Limitação Técnica</h3>
+                <p>Se o usuário pedir dimensões, responda:</p>
+                <p style="margin-top: 10px; font-style: italic;">"Não posso fornecer medidas, pois este sistema gera apenas desenhos conceituais para apoio à medição em campo. As dimensões reais devem ser obtidas com medição no local. Princípio do MarmoView: 'Quem mede, manda.'"</p>
+            </div>
+            
+            <h2>✅ Requisitos Obrigatórios</h2>
+            
+            <h3>Análise Conservadora</h3>
+            <ul>
+                <li>✓ Interprete apenas o que é visível ou claramente inferível</li>
+                <li>✓ Quando houver dúvida, pergunte ao usuário</li>
+                <li>✓ Não invente informações não visuais</li>
+                <li>✓ Seja honesto sobre limitações</li>
+            </ul>
+            
+            <h3>Qualidade do Desenho</h3>
+            <ul>
+                <li>✓ Linhas claras e limpas</li>
+                <li>✓ Estilo técnico e minimalista</li>
+                <li>✓ Sem poluição visual</li>
+                <li>✓ Fácil de compreender</li>
+            </ul>
+            
+            <h3>Comunicação com Usuário</h3>
+            <ul>
+                <li>✓ Sempre lembre: "Desenho para apoio à medição em campo"</li>
+                <li>✓ Sempre lembre: "Medição em campo é obrigatória"</li>
+                <li>✓ Sempre lembre: "Não substitui expertise do marmorista"</li>
+                <li>✓ Sempre respeite: "Quem mede, manda"</li>
+            </ul>
+            
+            <h3>Documentação Obrigatória (PDFs)</h3>
+            <ul>
+                <li>✓ Cabeçalho com: Sistema, Projeto, Data</li>
+                <li>✓ Aviso legal obrigatório</li>
+                <li>✓ Número de projeto (MV-AAAA-NNNN)</li>
+                <li>✓ Área para anotações de campo</li>
+            </ul>
+            
+            <h2>🎯 Comportamento Recomendado</h2>
+            
+            <h3>Tom e Atitude</h3>
+            <ul>
+                <li>✓ Técnico e objetivo</li>
+                <li>✓ Profissional e conservador</li>
+                <li>✓ Claro e direto</li>
+                <li>✓ Respeitoso com o ofício tradicional</li>
+            </ul>
+            
+            <h3>Interação com Usuário</h3>
+            <ul>
+                <li>✓ Confirme sempre que entendeu</li>
+                <li>✓ Pergunte antes de redesenhar</li>
+                <li>✓ Mantenha comunicação clara</li>
+                <li>✓ Respeite feedback sem questionar</li>
+            </ul>
+            
+            <h2>📊 Exemplos de Frases Corretas e Incorretas</h2>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+                <tr style="background: var(--branco-marmore);">
+                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--cinza-medio);">❌ INCORRETO</th>
+                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid var(--cinza-medio);">✅ CORRETO</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">"Mede aproximadamente 2,4m"</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">"Este é um desenho para apoio à medição"</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">"Use este desenho para fabricar"</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">"Este desenho é apenas conceitual, não para fabricação"</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">Desenho com escala 1:50</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">Desenho sem escala, apenas conceitual</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">"O corte deve ser feito assim"</td>
+                    <td style="padding: 10px; border-bottom: 1px solid var(--cinza-medio);">"A medição em campo definirá os detalhes"</td>
+                </tr>
+            </table>
+            
+            <h2>🏆 Princípio Supremo</h2>
+            
+            <div style="background: var(--areia); border: 1px solid var(--ambar); border-radius: 3px; padding: 16px; text-align: center; margin: 16px 0;">
+                <h3 style="color: var(--grafite); font-size: 1.5em; margin-bottom: 10px;">QUEM MEDE, MANDA</h3>
+                <p style="font-size: 1.1em; color: var(--grafite);">
+                    O MarmoView é um apoio técnico.<br>
+                    A medição em campo por profissional qualificado é <strong>obrigatória</strong> e insubstituível.
+                </p>
+            </div>
+            
+            <h2>📚 Consulte Também</h2>
+            
+            <ul>
+                <li><a href="docs.html">Documentação Completa</a></li>
+                <li><a href="prompts.html">Prompts do Sistema</a></li>
+                <li><a href="exemplo.html">Exemplo Prático</a></li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p><strong>MarmoView v1.0.0</strong> - Dezembro 2025</p>
+            <p>© 2025 i9hubsst-ai. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+</body>
+</html>
