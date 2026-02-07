@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Alguma coisa
+Alguma coisa Qualque coisa
 MarmoView Backend - Sistema de Upload e Geração de Desenhos
 Sem persistência: dados são mantidos apenas em memória durante execução
 """
