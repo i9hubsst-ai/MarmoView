@@ -1,9 +1,18 @@
+
+######
+######
+######
+######
+######
+######
+######
+######
 #!/usr/bin/env python3
 """
 MarmoView Backend - Sistema de Upload e Geração de Desenhos
 Sem persistência: dados são mantidos apenas em memória durante execução
 """
-######
+
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
