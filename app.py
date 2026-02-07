@@ -1,12 +1,3 @@
-
-######
-######
-######
-######
-######
-######
-######
-######
 #!/usr/bin/env python3
 """
 Alguma coisa Qualque coisa
