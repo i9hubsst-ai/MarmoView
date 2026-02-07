@@ -19,6 +19,11 @@ import uuid
 import json
 import requests
 
+# Carrega variáveis de ambiente do arquivo .env
+from dotenv import load_dotenv
+load_dotenv()
+print("[CONFIG] Arquivo .env carregado")
+
 # Importar cliente OpenAI (usaremos mock se não estiver configurado)
 try:
     from openai import OpenAI
@@ -139,10 +144,54 @@ def generate_drawing(session_id):
     # Gera imagem do desenho em memória
     drawing_image = generate_drawing_image(drawing_description, data, ai_analysis)
     
-    # --- Integração Hugging Face Space para geração de imagem ---
+    # --- Prioridade: OpenAI DALL-E 3 > Hugging Face > Desenho Local ---
+    
+    # OPÇÃO 1: Tentar OpenAI DALL-E 3 primeiro (melhor qualidade)
+    if HAS_OPENAI and data['images']:
+        try:
+            # Cria prompt técnico detalhado
+            env_map = {
+                'cozinha': 'kitchen countertop',
+                'banheiro': 'bathroom vanity',
+                'area-gourmet': 'gourmet area',
+                'lavabo': 'powder room',
+                'outro': 'interior space'
+            }
+            
+            format_map = {
+                'reto': 'linear straight layout',
+                'l': 'L-shaped layout',
+                'u': 'U-shaped layout',
+                'ilha': 'island configuration',
+                'pensula': 'peninsula layout',
+                'irregular': 'custom irregular shape'
+            }
+            
+            env_desc = env_map.get(data['form']['envType'], 'interior space')
+            format_desc = format_map.get(data['form']['format'], 'custom layout')
+            
+            # Prompt otimizado para DALL-E 3
+            prompt = f"Professional technical architectural blueprint drawing of {env_desc} with {format_desc}. "
+            prompt += f"Top-down view, marble or granite countertop installation layout. "
+            prompt += f"Clean lines, precise measurements indicators, professional CAD style, "
+            prompt += f"minimalist design, high quality technical illustration with detailed stone placement"
+            
+            print(f"[OpenAI] Gerando imagem com DALL-E 3...")
+            print(f"[OpenAI] Prompt: {prompt[:100]}...")
+            
+            dalle_img = generate_image_with_dalle(prompt)
+            if dalle_img:
+                print("[OpenAI] ✓ Imagem gerada com sucesso via DALL-E 3")
+                drawing_image = dalle_img
+            else:
+                print("[OpenAI] ⚠️ DALL-E 3 falhou, tentando alternativas...")
+        except Exception as e:
+            print(f"[OpenAI] ⚠️ Erro: {e}")
+    
+    # OPÇÃO 2: Se OpenAI falhou/indisponível, tentar Hugging Face
     HF_SPACE_URL = os.getenv('HF_SPACE_URL')
     HF_TOKEN = os.getenv('HF_API_KEY')
-    USE_HF_IMAGE = bool(HF_SPACE_URL)
+    USE_HF_IMAGE = bool(HF_SPACE_URL) and not HAS_OPENAI  # Só tenta HF se OpenAI não estiver configurado
 
     if USE_HF_IMAGE and data['images']:
         try:
@@ -993,6 +1042,52 @@ def health_check():
         'sessions_active': len(session_data),
         'timestamp': datetime.now().isoformat()
     })
+
+def generate_image_with_dalle(prompt, size="1024x1024", quality="standard"):
+    """
+    Gera imagem usando OpenAI DALL-E 3
+    Retorna bytes da imagem gerada ou None em caso de erro.
+    
+    Parâmetros:
+    - prompt: Descrição da imagem desejada
+    - size: "1024x1024", "1024x1792", ou "1792x1024"
+    - quality: "standard" (~$0.04) ou "hd" (~$0.08)
+    """
+    try:
+        from openai import OpenAI
+        
+        print(f"[DALL-E] Iniciando geração de imagem...")
+        print(f"[DALL-E] Tamanho: {size}, Qualidade: {quality}")
+        
+        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        
+        # Gera imagem
+        response = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            size=size,
+            quality=quality,
+            n=1
+        )
+        
+        # Pega URL da imagem gerada
+        image_url = response.data[0].url
+        print(f"[DALL-E] ✓ Imagem gerada: {image_url[:50]}...")
+        
+        # Baixa a imagem
+        img_response = requests.get(image_url, timeout=60)
+        if img_response.status_code == 200:
+            print(f"[DALL-E] ✓ Imagem baixada ({len(img_response.content)} bytes)")
+            return img_response.content
+        else:
+            print(f"[DALL-E] ⚠️ Erro ao baixar imagem: {img_response.status_code}")
+            
+    except Exception as e:
+        print(f"[DALL-E] ⚠️ Erro: {e}")
+        import traceback
+        traceback.print_exc()
+    
+    return None
 
 def generate_image_with_hf_space(input_image_b64, prompt, hf_space_url, hf_token=None):
     """
