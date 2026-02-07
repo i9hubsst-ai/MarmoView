@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+Alguma coisa
 MarmoView Backend - Sistema de Upload e Geração de Desenhos
 Sem persistência: dados são mantidos apenas em memória durante execução
 """
@@ -13,7 +14,8 @@ import base64
 from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from reportlab.lib.units import cm
+fromgit status
+reportlab.lib.units import cm
 from PIL import Image, ImageDraw, ImageFont
 import uuid
 import json
