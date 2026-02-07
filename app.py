@@ -13,8 +13,7 @@ import base64
 from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-fromgit status
-reportlab.lib.units import cm
+from reportlab.lib.units import cm
 from PIL import Image, ImageDraw, ImageFont
 import uuid
 import json
@@ -146,14 +145,50 @@ def generate_drawing(session_id):
     USE_HF_IMAGE = bool(HF_SPACE_URL)
 
     if USE_HF_IMAGE and data['images']:
-        # Usa a primeira imagem enviada como base
-        input_image_b64 = data['images'][0]['data']
-        # Prompt pode ser detalhado a partir do drawing_description
-        prompt = drawing_description.get('title', '') + ". " + drawing_description.get('characteristics', '')
-        # Chama Hugging Face Space
-        hf_img = generate_image_with_hf_space(input_image_b64, prompt, HF_SPACE_URL, HF_TOKEN)
-        if hf_img:
-            drawing_image = hf_img
+        try:
+            # Usa a primeira imagem enviada como base
+            input_image_b64 = data['images'][0]['data']
+            
+            # Cria prompt técnico detalhado para melhor resultado
+            env_map = {
+                'cozinha': 'kitchen countertop',
+                'banheiro': 'bathroom vanity',
+                'area-gourmet': 'gourmet area',
+                'lavabo': 'powder room',
+                'outro': 'interior space'
+            }
+            
+            format_map = {
+                'reto': 'linear straight layout',
+                'l': 'L-shaped layout',
+                'u': 'U-shaped layout',
+                'ilha': 'island configuration',
+                'pensula': 'peninsula layout',
+                'irregular': 'custom irregular shape'
+            }
+            
+            env_desc = env_map.get(data['form']['envType'], 'interior space')
+            format_desc = format_map.get(data['form']['format'], 'custom layout')
+            
+            # Prompt otimizado para desenho técnico
+            prompt = f"Technical architectural drawing of {env_desc} with {format_desc}, "
+            prompt += f"marble or granite countertop installation, "
+            prompt += f"professional blueprint style, clean lines, top-down view, "
+            prompt += f"precise measurements indication, technical illustration, "
+            prompt += f"high quality architectural rendering, detailed stone layout"
+            
+            print(f"[HF] Prompt técnico gerado: {prompt}")
+            
+            # Chama Hugging Face Space
+            print(f"[HF] Tentando gerar imagem com HF Space: {HF_SPACE_URL}")
+            hf_img = generate_image_with_hf_space(input_image_b64, prompt, HF_SPACE_URL, HF_TOKEN)
+            if hf_img:
+                print("[HF] ✓ Imagem gerada com sucesso via Hugging Face")
+                drawing_image = hf_img
+            else:
+                print("[HF] ⚠️ Hugging Face falhou, usando desenho conceitual local")
+        except Exception as e:
+            print(f"[HF] ⚠️ Erro ao tentar Hugging Face: {e}. Usando desenho conceitual local")
 
     # Atualiza status
     session_data[session_id]['status'] = 'drawing_created'
@@ -371,99 +406,331 @@ def generate_geometric_shapes(form):
     return shapes
 
 def generate_drawing_image(drawing, data, ai_analysis=None):
-    """Gera imagem PNG do desenho conceitual com análise de IA"""
-    from PIL import ImageDraw
+    """Gera imagem PNG do desenho conceitual com análise de IA - VERSÃO MELHORADA"""
+    from PIL import ImageDraw, ImageFont
     
     # Análise dos dados para desenho mais preciso
     form = data['form']
     
-    # Cria canvas maior 1000x700
-    img = Image.new('RGB', (1000, 700), color=(245, 245, 242))  # branco-marmore
+    # Cria canvas maior com proporção melhor - 1200x800
+    img = Image.new('RGB', (1200, 800), color=(255, 255, 255))  # fundo branco puro
     draw = ImageDraw.Draw(img)
     
-    # Configuração de cores
-    cor_principal = (110, 139, 127)  # jade
-    cor_texto = (46, 46, 46)  # grafite
-    cor_claro = (158, 158, 158)  # cinza-medio
-    cor_borda = (46, 46, 46)
+    # Configuração de cores profissionais
+    cor_principal = (70, 100, 90)  # verde-escuro elegante
+    cor_secundaria = (120, 160, 140)  # verde-médio
+    cor_texto = (30, 30, 30)  # quase preto
+    cor_titulo = (50, 50, 50)  # cinza escuro
+    cor_grid = (240, 240, 240)  # cinza muito claro
+    cor_recorte = (200, 50, 50)  # vermelho para recortes
+    cor_medida = (100, 100, 180)  # azul para medidas
+    
+    # === CABEÇALHO ===
+    try:
+        # Tenta usar fonte TrueType, senão usa padrão
+        font_titulo = ImageFont.truetype("arial.ttf", 24)
+        font_subtitulo = ImageFont.truetype("arial.ttf", 16)
+        font_texto = ImageFont.truetype("arial.ttf", 12)
+        font_nota = ImageFont.truetype("arial.ttf", 10)
+    except:
+        font_titulo = ImageFont.load_default()
+        font_subtitulo = ImageFont.load_default()
+        font_texto = ImageFont.load_default()
+        font_nota = ImageFont.load_default()
     
     # Título
-    draw.text((40, 30), drawing['title'], fill=cor_texto)
+    draw.text((30, 20), "MARMOVIEW - DESENHO CONCEITUAL", fill=cor_titulo, font=font_titulo)
+    
+    # Linha divisória
+    draw.line([(30, 55), (1170, 55)], fill=cor_grid, width=2)
     
     # Informações do projeto
     y = 70
-    info_text = f"Ambiente: {drawing['environment']} | Formato: {drawing['format']}"
-    draw.text((40, y), info_text, fill=cor_claro)
+    info_text = f"Ambiente: {drawing['environment'].upper()}"
+    draw.text((30, y), info_text, fill=cor_texto, font=font_subtitulo)
     
-    y = 110
-    elementos_text = f"Elementos: {', '.join(drawing['elements'][:3])}" if drawing['elements'] else "Elementos: Diversos"
-    draw.text((40, y), elementos_text, fill=cor_claro)
+    y = 95
+    formato_text = f"Configuração: {drawing['format']}"
+    draw.text((30, y), formato_text, fill=cor_texto, font=font_texto)
+    
+    # Elementos identificados
+    if drawing['elements'] and drawing['elements'][0] != 'nenhum':
+        y = 115
+        elementos = ', '.join([e.capitalize() for e in drawing['elements'][:5]])
+        draw.text((30, y), f"Elementos: {elementos}", fill=cor_secundaria, font=font_texto)
     
     # Mostra se análise IA foi aplicada
     if ai_analysis and 'confidence' in ai_analysis:
         y = 135
         ai_confidence = ai_analysis.get('confidence', 0)
-        draw.text((40, y), f"✓ Análise IA: {ai_confidence}% de confiança", fill=cor_principal)
-        y_offset = 190  # Ajusta offset para texto da IA
+        draw.text((30, y), f"✓ Análise IA aplicada - Confiança: {ai_confidence}%", 
+                 fill=cor_principal, font=font_texto)
+        y_offset = 170
     else:
-        y_offset = 170  # Offset normal
+        y = 135
+        draw.text((30, y), "⚠ Desenho baseado em formulário (sem análise de IA)", 
+                 fill=(150, 150, 150), font=font_nota)
+        y_offset = 160
     
-    # Área principal de desenho
-    canvas_height = 450
-    canvas_width = 900
+    # === ÁREA DE DESENHO PRINCIPAL ===
+    canvas_x = 50
+    canvas_y = y_offset
+    canvas_width = 1100
+    canvas_height = 500
     
-    # Desenha bordos da área de desenho
-    draw.rectangle([40, y_offset, 40 + canvas_width, y_offset + canvas_height], 
-                   outline=cor_borda, width=2)
+    # Fundo da área de desenho
+    draw.rectangle([canvas_x, canvas_y, canvas_x + canvas_width, canvas_y + canvas_height], 
+                   fill=(250, 250, 250), outline=cor_titulo, width=2)
     
-    # Desenha grid sutil
-    for i in range(0, canvas_width, 100):
-        draw.line([40 + i, y_offset, 40 + i, y_offset + canvas_height], 
-                 fill=(220, 220, 220), width=1)
-    for i in range(0, canvas_height, 100):
-        draw.line([40, y_offset + i, 40 + canvas_width, y_offset + i], 
-                 fill=(220, 220, 220), width=1)
+    # Grid profissional mais sutil
+    grid_spacing = 50
+    for i in range(0, canvas_width, grid_spacing):
+        draw.line([canvas_x + i, canvas_y, canvas_x + i, canvas_y + canvas_height], 
+                 fill=cor_grid, width=1)
+    for i in range(0, canvas_height, grid_spacing):
+        draw.line([canvas_x, canvas_y + i, canvas_x + canvas_width, canvas_y + i], 
+                 fill=cor_grid, width=1)
     
-    # Desenha formas baseadas no formato e análise IA
-    margin = 80
+    # === DESENHO DA CONFIGURAÇÃO ===
+    margin_x = 100
+    margin_y = 50
+    drawing_area_width = canvas_width - 2 * margin_x
+    drawing_area_height = canvas_height - 2 * margin_y
+    base_x = canvas_x + margin_x
+    base_y = canvas_y + margin_y
     
+    # Desenha baseado na configuração e análise IA
     if ai_analysis and 'stone_layout' in ai_analysis:
-        # Usa posicionamento inteligente da IA
-        draw_intelligent_layout(draw, ai_analysis, y_offset, canvas_width, canvas_height, cor_principal, cor_borda, cor_texto)
+        draw_intelligent_layout(draw, ai_analysis, canvas_y, canvas_width, canvas_height, 
+                               cor_principal, cor_titulo, cor_texto, canvas_x, font_texto)
     else:
-        # Fallback: desenho genérico
-        draw_format_shapes(draw, form['format'], y_offset + margin, cor_principal, cor_borda)
-        draw_stone_elements(draw, form['stoneElements'], y_offset + margin, cor_principal)
-        draw_cutouts(draw, form['cutouts'], y_offset + margin, cor_texto)
+        # Desenho melhorado baseado no formato
+        draw_improved_format(draw, form['format'], base_x, base_y, drawing_area_width, 
+                           drawing_area_height, cor_principal, cor_secundaria, cor_titulo, font_texto)
+        
+        # Adiciona elementos de pedra
+        draw_improved_elements(draw, form['stoneElements'], base_x, base_y, 
+                              drawing_area_width, drawing_area_height, cor_secundaria, font_nota)
+        
+        # Adiciona recortes
+        draw_improved_cutouts(draw, form['cutouts'], base_x, base_y, 
+                            drawing_area_width, drawing_area_height, cor_recorte, font_nota)
     
-    # Legenda de recortes
-    y = y_offset + canvas_height + 30
-    recortes_text = f"Recortes: {', '.join(form['cutouts'])}" if form['cutouts'] and form['cutouts'][0] != 'nenhum' else "Recortes: Não identificados"
-    draw.text((40, y), recortes_text, fill=cor_claro)
+    # === INFORMAÇÕES ADICIONAIS ===
+    y = canvas_y + canvas_height + 20
     
-    # Avisos legais
-    y = y + 40
-    draw.text((40, y), "⚠️ DESENHO CONCEITUAL - NÃO UTILIZAR PARA FABRICAÇÃO", fill=(164, 90, 82))
+    # Recortes identificados
+    if drawing['cutouts'] and drawing['cutouts'][0] != 'nenhum':
+        recortes = ', '.join([c.capitalize() for c in drawing['cutouts'][:5]])
+        draw.text((canvas_x, y), f"Recortes previstos: {recortes}", 
+                 fill=cor_recorte, font=font_texto)
+        y += 20
+    
+    # === AVISOS IMPORTANTES ===
+    y += 10
+    draw.rectangle([canvas_x, y, canvas_x + canvas_width, y + 60], 
+                   fill=(255, 245, 240), outline=cor_recorte, width=2)
+    
+    y += 10
+    draw.text((canvas_x + 20, y), "⚠️  IMPORTANTE - DESENHO CONCEITUAL", 
+             fill=cor_recorte, font=font_subtitulo)
     y += 25
-    draw.text((40, y), "Requer medição precisa em campo. Sem escala ou dimensões.", fill=cor_claro)
+    draw.text((canvas_x + 20, y), 
+             "• Não utilizar para fabricação • Requer medição precisa em campo • Sem escala exata", 
+             fill=cor_texto, font=font_nota)
     
-    # Rodapé
-    draw.text((40, 680), "MarmoView v1.0.0 - Desenho técnico minimalista para marmoraria", 
-             fill=(158, 158, 158))
+    # === RODAPÉ ===
+    draw.text((30, 775), f"MarmoView v1.0 - Gerado em {datetime.now().strftime('%d/%m/%Y %H:%M')}", 
+             fill=(180, 180, 180), font=font_nota)
+    draw.text((900, 775), f"Sessão: {data.get('session_id', 'N/A')[:12]}", 
+             fill=(180, 180, 180), font=font_nota)
     
     # Salva em buffer
     buffer = io.BytesIO()
-    img.save(buffer, format='PNG')
+    img.save(buffer, format='PNG', quality=95)
     buffer.seek(0)
     
     return buffer.read()
 
-def draw_intelligent_layout(draw, ai_analysis, y_offset, canvas_width, canvas_height, cor_principal, cor_borda, cor_texto):
+def draw_improved_format(draw, format_type, base_x, base_y, width, height, cor_principal, cor_secundaria, cor_borda, font):
+    """Desenha configuração de formato melhorada e proporcional"""
+    
+    # Mapeamento de formatos
+    format_map = {
+        'reto': 'Reto/Linear',
+        'l': 'Em L',
+        'u': 'Em U',
+        'ilha': 'Ilha Central',
+        'pensula': 'Península',
+        'irregular': 'Irregular'
+    }
+    
+    if format_type == 'reto':
+        # Bancada linear - ocupa 80% da largura
+        w = int(width * 0.8)
+        h = int(height * 0.25)
+        x = base_x + (width - w) // 2
+        y = base_y + height // 3
+        
+        # Bancada principal
+        draw.rectangle([x, y, x + w, y + h], outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x + 10, y + 10), "BANCADA", fill=cor_borda, font=font)
+        
+        # Linha de parede atrás
+        draw.line([base_x, y - 20, base_x + width, y - 20], fill=cor_borda, width=3)
+        draw.text((base_x + 10, y - 35), "PAREDE", fill=(150, 150, 150), font=font)
+        
+    elif format_type == 'l':
+        # Configuração em L
+        # Bancada horizontal
+        w1 = int(width * 0.6)
+        h1 = int(height * 0.2)
+        x1 = base_x + 50
+        y1 = base_y + 50
+        draw.rectangle([x1, y1, x1 + w1, y1 + h1], outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x1 + 10, y1 + 10), "BANCADA 1", fill=cor_borda, font=font)
+        
+        # Bancada vertical (perpendicular)
+        w2 = int(height * 0.2)
+        h2 = int(height * 0.5)
+        x2 = x1
+        y2 = y1 + h1
+        draw.rectangle([x2, y2, x2 + w2, y2 + h2], outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x2 + 10, y2 + 20), "BANCADA 2", fill=cor_borda, font=font)
+        
+        # Paredes
+        draw.line([base_x, y1 - 15, base_x + width, y1 - 15], fill=cor_borda, width=2)
+        draw.line([x2 - 15, y1, x2 - 15, base_y + height], fill=cor_borda, width=2)
+        
+    elif format_type == 'u':
+        # Configuração em U
+        espessura = int(height * 0.18)
+        
+        # Bancada direita
+        x1 = base_x + 50
+        y1 = base_y + 40
+        h1 = int(height * 0.7)
+        draw.rectangle([x1, y1, x1 + espessura, y1 + h1], 
+                      outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x1 + 5, y1 + 20), "BANC.\nLAT.", fill=cor_borda, font=font)
+        
+        # Bancada central (fundo)
+        x2 = x1
+        y2 = y1
+        w2 = int(width * 0.7)
+        draw.rectangle([x2, y2, x2 + w2, y2 + espessura], 
+                      outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x2 + w2//2 - 30, y2 + 10), "BANCADA FUNDO", fill=cor_borda, font=font)
+        
+        # Bancada esquerda
+        x3 = x2 + w2 - espessura
+        y3 = y2
+        draw.rectangle([x3, y3, x3 + espessura, y3 + h1], 
+                      outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x3 + 5, y3 + 20), "BANC.\nLAT.", fill=cor_borda, font=font)
+        
+    elif format_type == 'ilha':
+        # Ilha central com bancadas laterais
+        # Ilha no centro
+        ilha_w = int(width * 0.4)
+        ilha_h = int(height * 0.35)
+        ilha_x = base_x + (width - ilha_w) // 2
+        ilha_y = base_y + (height - ilha_h) // 2
+        draw.rectangle([ilha_x, ilha_y, ilha_x + ilha_w, ilha_y + ilha_h], 
+                      outline=cor_principal, fill=cor_secundaria, width=5)
+        draw.text((ilha_x + ilha_w//2 - 20, ilha_y + ilha_h//2), "ILHA", fill=cor_borda, font=font)
+        
+        # Bancada na parede
+        banc_w = int(width * 0.6)
+        banc_h = int(height * 0.15)
+        banc_x = base_x + (width - banc_w) // 2
+        banc_y = base_y + 30
+        draw.rectangle([banc_x, banc_y, banc_x + banc_w, banc_y + banc_h], 
+                      outline=cor_secundaria, fill=(200, 220, 210), width=3)
+        draw.text((banc_x + 10, banc_y + 5), "BANCADA PAREDE", fill=cor_borda, font=font)
+        
+    elif format_type == 'pensula':
+        # Península - bancada principal + extensão
+        # Bancada na parede
+        w1 = int(width * 0.7)
+        h1 = int(height * 0.2)
+        x1 = base_x + 40
+        y1 = base_y + 40
+        draw.rectangle([x1, y1, x1 + w1, y1 + h1], 
+                      outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x1 + 10, y1 + 10), "BANCADA PRINCIPAL", fill=cor_borda, font=font)
+        
+        # Península (perpendicular)
+        w2 = int(height * 0.25)
+        h2 = int(height * 0.45)
+        x2 = x1 + w1 - w2
+        y2 = y1 + h1
+        draw.rectangle([x2, y2, x2 + w2, y2 + h2], 
+                      outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((x2 + 10, y2 + 20), "PENÍNSULA", fill=cor_borda, font=font)
+        
+    else:
+        # Formato irregular - polígono assimétrico
+        points = [
+            (base_x + 100, base_y + 80),
+            (base_x + width - 150, base_y + 50),
+            (base_x + width - 100, base_y + height - 150),
+            (base_x + width - 250, base_y + height - 80),
+            (base_x + 80, base_y + height - 100)
+        ]
+        draw.polygon(points, outline=cor_principal, fill=cor_secundaria, width=4)
+        draw.text((base_x + width//2 - 50, base_y + height//2), 
+                 "FORMATO IRREGULAR", fill=cor_borda, font=font)
+
+def draw_improved_elements(draw, elements, base_x, base_y, width, height, cor, font):
+    """Desenha elementos de pedra melhorados"""
+    if not elements or elements[0] == 'nenhum':
+        return
+    
+    # Posiciona elementos de forma distribuída
+    element_positions = {
+        'bancada': (base_x + width * 0.3, base_y + height * 0.3),
+        'pia': (base_x + width * 0.5, base_y + height * 0.4),
+        'cooktop': (base_x + width * 0.6, base_y + height * 0.35),
+        'mesa': (base_x + width * 0.4, base_y + height * 0.6),
+        'soleira': (base_x + width * 0.7, base_y + height * 0.2)
+    }
+    
+    for element in elements[:4]:
+        if element in element_positions:
+            x, y = element_positions[element]
+            # Desenha ícone do elemento
+            draw.ellipse([x-25, y-25, x+25, y+25], outline=cor, width=3)
+            draw.text((x-20, y-5), element[:3].upper(), fill=cor, font=font)
+
+def draw_improved_cutouts(draw, cutouts, base_x, base_y, width, height, cor, font):
+    """Desenha recortes melhorados"""
+    if not cutouts or cutouts[0] == 'nenhum':
+        return
+    
+    # Posiciona recortes estrategicamente
+    cutout_positions = []
+    spacing_x = width // (len(cutouts) + 1)
+    
+    for i, cutout in enumerate(cutouts[:5]):
+        x = base_x + spacing_x * (i + 1)
+        y = base_y + height * 0.4
+        
+        # Desenha marca de recorte
+        size = 20
+        draw.ellipse([x-size, y-size, x+size, y+size], 
+                    outline=cor, fill=(255, 220, 220), width=3)
+        
+        # Label
+        label = cutout[:4].upper() if cutout != 'nenhum' else ''
+        draw.text((x-15, y-8), label, fill=cor, font=font)
+
+def draw_intelligent_layout(draw, ai_analysis, canvas_y, canvas_width, canvas_height, cor_principal, cor_borda, cor_texto, canvas_x, font):
     """Desenha layout inteligente baseado na análise da IA"""
     
     # Offset base para desenho (margem da área de desenho)
-    x_base = 40
-    y_base = y_offset
+    x_base = canvas_x
+    y_base = canvas_y
     
     try:
         stone_layout = ai_analysis.get('stone_layout', {})
@@ -483,13 +750,13 @@ def draw_intelligent_layout(draw, ai_analysis, y_offset, canvas_width, canvas_he
             y1 = y_base + int((y_start / 100) * canvas_height)
             y2 = y_base + int((y_end / 100) * canvas_height)
             
-            # Desenha retângulo do elemento
+            # Desenha retângulo do elemento com preenchimento
             draw.rectangle([x1, y1, x2, y2], 
-                          outline=cor_principal, width=4)
+                          outline=cor_principal, fill=(200, 220, 210), width=4)
             
             # Adiciona label do elemento
             label_y = y1 - 20 if y1 > y_base + 30 else y1 + 5
-            draw.text((x1 + 10, label_y), element.upper(), fill=cor_principal)
+            draw.text((x1 + 10, label_y), element.upper(), fill=cor_principal, font=font)
         
         # Desenha recortes nas posições especificadas
         cutouts = ai_analysis.get('cutouts_positions', [])
@@ -508,10 +775,11 @@ def draw_intelligent_layout(draw, ai_analysis, y_offset, canvas_width, canvas_he
             
             # Desenha círculo vermelho para recorte
             draw.ellipse([cx - radius, cy - radius, cx + radius, cy + radius],
-                        outline=(164, 90, 82), width=3, fill=(255, 200, 200, 128))
+                        outline=(200, 50, 50), fill=(255, 200, 200), width=3)
             
             # Label do recorte
-            draw.text((cx + radius + 5, cy - 10), cutout_type[:3].upper(), fill=(164, 90, 82))
+            draw.text((cx + radius + 5, cy - 10), cutout_type[:3].upper(), 
+                     fill=(200, 50, 50), font=font)
         
         # Adiciona notas da IA se houver
         drawing_instructions = ai_analysis.get('drawing_instructions', [])
@@ -520,7 +788,7 @@ def draw_intelligent_layout(draw, ai_analysis, y_offset, canvas_width, canvas_he
             note_text = " | ".join(drawing_instructions[:2])  # Primeiras 2 instruções
             if len(note_text) > 100:
                 note_text = note_text[:97] + "..."
-            draw.text((x_base, y_note), f"ℹ️ {note_text}", fill=(110, 139, 127))
+            draw.text((x_base, y_note), f"ℹ️ {note_text}", fill=cor_principal, font=font)
             
     except Exception as e:
         print(f"⚠️ Erro ao desenhar layout inteligente: {e}")
@@ -728,40 +996,165 @@ def health_check():
 
 def generate_image_with_hf_space(input_image_b64, prompt, hf_space_url, hf_token=None):
     """
-    Envia imagem base64 + prompt para um Space Hugging Face (ex: ControlNet, SDXL img2img)
+    Envia imagem base64 + prompt para um Space Hugging Face usando Gradio Client
+    Suporta tanto URL do space quanto nome do repositório
     Retorna bytes da imagem gerada ou None em caso de erro.
     """
     try:
-        # Decodifica imagem base64 para bytes
-        image_bytes = base64.b64decode(input_image_b64)
-        files = {"image": ("input.png", image_bytes, "image/png")}
-        data = {"prompt": prompt}
-        headers = {}
+        # Importa gradio_client
+        try:
+            from gradio_client import Client
+            print("[HF] Gradio Client disponível")
+        except ImportError:
+            print("[HF] ⚠️ gradio_client não instalado. Tentando método HTTP direto...")
+            return _generate_image_http_fallback(input_image_b64, prompt, hf_space_url, hf_token)
+        
+        print(f"[HF] Conectando ao Space: {hf_space_url}")
+        print(f"[HF] Prompt: {prompt[:100]}...")
+        
+        # Converte URL para formato correto
+        # Se for URL completa, extrai o nome do space
+        space_name = hf_space_url
+        if "huggingface.co/spaces/" in hf_space_url:
+            # Extrai: https://huggingface.co/spaces/usuario/modelo -> usuario/modelo
+            space_name = hf_space_url.split("/spaces/")[-1].strip("/")
+            print(f"[HF] Space detectado: {space_name}")
+        elif ".hf.space" in hf_space_url:
+            # URL direta do space - usa como está
+            space_name = hf_space_url
+        
+        # Conecta ao Space
         if hf_token:
-            headers["Authorization"] = f"Bearer {hf_token}"
-        # Alguns Spaces usam /api/predict, outros /run/predict, outros / (root)
-        # Exemplo: https://huggingface.co/spaces/hysts/ControlNet
-        response = requests.post(hf_space_url, data=data, files=files, headers=headers, timeout=120)
-        if response.status_code == 200:
-            # Pode retornar JSON com url ou bytes diretos
-            if "application/json" in response.headers.get("Content-Type", ""):
-                result = response.json()
-                # Tenta pegar url ou base64
-                if "image" in result:
-                    # Pode ser base64
-                    return base64.b64decode(result["image"])
-                elif "url" in result:
-                    # Baixa a imagem
-                    img_resp = requests.get(result["url"])
+            client = Client(space_name, headers={"Authorization": f"Bearer {hf_token}"})
+        else:
+            client = Client(space_name)
+        print(f"[HF] ✓ Conectado ao Space")
+        
+        # Decodifica imagem base64 para salvar temporariamente
+        image_bytes = base64.b64decode(input_image_b64)
+        
+        # Salva temporariamente
+        temp_path = f"temp_input_{uuid.uuid4()}.png"
+        with open(temp_path, 'wb') as f:
+            f.write(image_bytes)
+        
+        print(f"[HF] Enviando imagem e prompt para processamento...")
+        
+        # Tenta prever com diferentes assinaturas comuns
+        result = None
+        try:
+            # Tenta primeiro com imagem + prompt (mais comum para img2img)
+            result = client.predict(temp_path, prompt, api_name="/predict")
+        except:
+            try:
+                # Tenta sem api_name
+                result = client.predict(temp_path, prompt)
+            except:
+                try:
+                    # Tenta apenas com imagem
+                    result = client.predict(temp_path)
+                except Exception as e:
+                    print(f"[HF] ⚠️ Erro na predição: {e}")
+                    # Remove arquivo temporário
+                    if os.path.exists(temp_path):
+                        os.remove(temp_path)
+                    return None
+        
+        # Remove arquivo temporário
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+        
+        if result:
+            print(f"[HF] ✓ Resposta recebida: {type(result)}")
+            
+            # Result pode ser caminho de arquivo, URL ou bytes
+            if isinstance(result, str):
+                if os.path.exists(result):
+                    # É um arquivo local
+                    print(f"[HF] Lendo arquivo gerado: {result}")
+                    with open(result, 'rb') as f:
+                        return f.read()
+                elif result.startswith('http'):
+                    # É uma URL
+                    print(f"[HF] Baixando de URL: {result}")
+                    img_resp = requests.get(result)
                     if img_resp.status_code == 200:
                         return img_resp.content
-            else:
-                # Retorno direto da imagem
-                return response.content
-        else:
-            print(f"[HF Space] Status: {response.status_code} - {response.text}")
+            elif isinstance(result, bytes):
+                print("[HF] ✓ Imagem recebida como bytes")
+                return result
+            elif isinstance(result, (list, tuple)) and len(result) > 0:
+                # Gradio às vezes retorna lista
+                img_path = result[0] if isinstance(result[0], str) else result
+                if isinstance(img_path, str) and os.path.exists(img_path):
+                    print(f"[HF] Lendo arquivo da lista: {img_path}")
+                    with open(img_path, 'rb') as f:
+                        return f.read()
+        
+        print("[HF] ⚠️ Não foi possível extrair imagem do resultado")
+        
     except Exception as e:
-        print(f"[HF Space] Erro: {e}")
+        print(f"[HF] ⚠️ Exceção: {e}")
+        import traceback
+        traceback.print_exc()
+    
+    return None
+
+def _generate_image_http_fallback(input_image_b64, prompt, hf_space_url, hf_token=None):
+    """Método HTTP fallback quando Gradio Client não está disponível"""
+    try:
+        print(f"[HF] Tentando método HTTP para: {hf_space_url}")
+        
+        # Converte para URL da API se necessário
+        api_url = hf_space_url
+        if "huggingface.co/spaces/" in hf_space_url:
+            # Converte para formato .hf.space
+            space_name = hf_space_url.split("/spaces/")[-1].strip("/")
+            username, model = space_name.split("/")
+            api_url = f"https://{username}-{model}.hf.space/api/predict"
+            print(f"[HF] URL da API: {api_url}")
+        elif not api_url.endswith("/api/predict"):
+            api_url = api_url.rstrip("/") + "/api/predict"
+        
+        # Decodifica imagem
+        image_bytes = base64.b64decode(input_image_b64)
+        
+        # Payload para Gradio API
+        payload = {
+            "data": [
+                f"data:image/png;base64,{input_image_b64}",
+                prompt
+            ]
+        }
+        
+        headers = {"Content-Type": "application/json"}
+        if hf_token:
+            headers["Authorization"] = f"Bearer {hf_token}"
+        
+        response = requests.post(api_url, json=payload, headers=headers, timeout=120)
+        
+        print(f"[HF] Status HTTP: {response.status_code}")
+        
+        if response.status_code == 200:
+            result = response.json()
+            if "data" in result and len(result["data"]) > 0:
+                img_data = result["data"][0]
+                if isinstance(img_data, str):
+                    if img_data.startswith("data:image"):
+                        # Base64 embutido
+                        img_b64 = img_data.split(",")[1]
+                        return base64.b64decode(img_b64)
+                    elif img_data.startswith("http"):
+                        # URL
+                        img_resp = requests.get(img_data)
+                        if img_resp.status_code == 200:
+                            return img_resp.content
+        else:
+            print(f"[HF] Erro: {response.text[:300]}")
+            
+    except Exception as e:
+        print(f"[HF] Erro no fallback HTTP: {e}")
+    
     return None
 
 if __name__ == '__main__':
@@ -771,6 +1164,28 @@ if __name__ == '__main__':
     print("✓ Sem persistência: dados em memória")
     print("✓ Upload de imagens ativo")
     print("✓ Geração de PDF ativo")
+    print("=" * 60)
+    
+    # Status de integração com IAs
+    print("Status de Integrações IA:")
+    if HAS_CLAUDE_VISION:
+        print("  ✓ Claude Vision: ATIVO (análise de imagens)")
+    else:
+        print("  ✗ Claude Vision: INATIVO (configure ANTHROPIC_API_KEY)")
+    
+    if HAS_OPENAI:
+        print("  ✓ OpenAI: ATIVO")
+    else:
+        print("  ✗ OpenAI: INATIVO (configure OPENAI_API_KEY)")
+    
+    hf_url = os.getenv('HF_SPACE_URL')
+    if hf_url:
+        print(f"  ⚠️  Hugging Face Space: {hf_url}")
+        print("      (Verifique se a URL está correta)")
+    else:
+        print("  ✗ Hugging Face: INATIVO")
+    
+    print("\n  ℹ️  Desenhos conceituais locais: SEMPRE DISPONÍVEL")
     print("=" * 60)
     print("Acesse: http://localhost:5000")
     print("=" * 60)
